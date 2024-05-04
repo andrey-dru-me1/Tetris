@@ -2,6 +2,7 @@
 #define BITARRAY_H_68415
 
 #include <stddef.h>
+
 #include "../bit.h"
 
 typedef struct {

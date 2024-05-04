@@ -155,7 +155,7 @@ static void endgame() {
   bitmatrix.remove(&field);
   falling_figure.remove(&ff);
   for (size_t i = 0; i < 7; i++) {
-    figure.remove(figset);
+    figure.remove(figset + i);
   }
 }
 
@@ -184,6 +184,10 @@ void userInput(UserAction_t action, bool hold) {
 
 #include <stdlib.h>
 
+static bool checkconstraints(int row, int col, int width, int height) {
+  return row >= 0 && row < width && col >= 0 && col < height;
+}
+
 GameInfo_t updateCurrentState() {
   int **intfield = calloc(12, sizeof(int *));
   for (int i = 0; i < 12; i++) {
@@ -195,7 +199,9 @@ GameInfo_t updateCurrentState() {
   bitmatrix_t bm = figure.get(ff.fig, ff.rotidx);
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
-      intfield[ff.row + i][ff.col + j] |= bitmatrix.get(&bm, i, j);
+      if (checkconstraints(ff.row + i, ff.col + j, ff.field->rows,
+                           ff.field->cols))
+        intfield[ff.row + i][ff.col + j] |= bitmatrix.get(&bm, i, j);
     }
   }
   return (GameInfo_t){.field = intfield};

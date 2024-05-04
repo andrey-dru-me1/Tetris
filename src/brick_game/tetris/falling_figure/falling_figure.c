@@ -13,14 +13,10 @@ static bool validate(falling_figure_t *ff) {
   for (int i = 0; !does_overlap && i < bm.rows; i++) {
     for (int j = 0; !does_overlap && j < bm.cols; j++) {
       bit figbit = bitmatrix.get(&bm, i, j);
-      if (ff->row + i < 0 || ff->row + i >= ff->field->rows ||
-          ff->col + j < 0 || ff->col + j >= ff->field->cols ||
-          (figbit == 1 &&
+      if (figbit == 1 &&
+          (ff->row + i < 0 || ff->row + i >= ff->field->rows ||
+           ff->col + j < 0 || ff->col + j >= ff->field->cols ||
            bitmatrix.get(ff->field, ff->row + i, ff->col + j) == 1))
-        // if (figbit == 1 &&
-        //     (ff->row + i < 0 || ff->row + i >= ff->field->rows ||
-        //      ff->col + j < 0 || ff->col + j >= ff->field->cols ||
-        //      bitmatrix.get(ff->field, ff->row + i, ff->col + j) == 1))
         does_overlap = true;
     }
   }
