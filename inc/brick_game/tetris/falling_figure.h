@@ -3,8 +3,8 @@
 
 #include <stdbool.h>
 
-#include "../field.h"
-#include "../figure/figure.h"
+#include "field.h"
+#include "figure.h"
 
 typedef struct {
   figure_t *fig;

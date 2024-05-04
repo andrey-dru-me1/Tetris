@@ -1,7 +1,7 @@
 #ifndef BITMATRIX_H_78651
 #define BITMATRIX_H_78651
 
-#include "../bitarray/bitarray.h"
+#include "bitarray.h"
 
 typedef struct {
   bitarray_t val;

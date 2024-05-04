@@ -1,11 +1,11 @@
-#include "tetris.h"
+#include "brick_game/tetris/tetris.h"
 
 #include <stdlib.h>
 #include <time.h>
 
-#include "./falling_figure/falling_figure.h"
-#include "./field.h"
-#include "./figure/figure.h"
+#include "brick_game/tetris/falling_figure.h"
+#include "brick_game/tetris/field.h"
+#include "brick_game/tetris/figure.h"
 
 static figure_t generate_I_figure() {
   figure_t figI;
@@ -178,6 +178,8 @@ void userInput(UserAction_t action, bool hold) {
       break;
     case Terminate:
       endgame();
+      break;
+    default:
       break;
   }
 }

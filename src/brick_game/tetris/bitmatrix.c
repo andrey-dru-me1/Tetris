@@ -1,4 +1,4 @@
-#include "bitmatrix.h"
+#include "brick_game/tetris/bitmatrix.h"
 
 static void create(bitmatrix_t *bitmatrix, size_t rows, size_t cols) {
   bitarray.create(&bitmatrix->val, rows * cols);

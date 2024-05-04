@@ -1,4 +1,4 @@
-#include "bitarray.h"
+#include "brick_game/tetris/bitarray.h"
 
 #include <stdlib.h>
 

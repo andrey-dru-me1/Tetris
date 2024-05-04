@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#include "../bit.h"
+#include "bit.h"
 
 typedef struct {
   bit *val;

@@ -1,4 +1,4 @@
-#include "falling_figure.h"
+#include "brick_game/tetris/falling_figure.h"
 
 static void create(falling_figure_t *ff, figure_t *fig, field_t *field, int row,
                    int col, int rotidx) {

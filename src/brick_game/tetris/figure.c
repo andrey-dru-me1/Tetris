@@ -1,4 +1,4 @@
-#include "figure.h"
+#include "brick_game/tetris/figure.h"
 
 #include <stdlib.h>
 
