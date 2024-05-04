@@ -3,8 +3,8 @@
 
 #include <stdbool.h>
 
-#include "field.h"
-#include "figure.h"
+#include "brick_game/tetris/field.h"
+#include "brick_game/tetris/figure.h"
 
 typedef struct {
   figure_t *fig;
