@@ -10,15 +10,11 @@ typedef struct {
   size_t n;
 } bitarray_t;
 
-struct bitarray_module {
-  void (*create)(bitarray_t *bitarray, size_t n);
-  bit (*get)(bitarray_t *bitarray, size_t i);
-  void (*set)(bitarray_t *bitarray, size_t i);
-  void (*reset)(bitarray_t *bitarray, size_t i);
-  void (*set_bit)(bitarray_t *bitarray, size_t i, bit val);
-  void (*remove)(bitarray_t *bitarray);
-};
-
-extern struct bitarray_module bitarray;
+void bitarray_create(bitarray_t *bitarray, size_t n);
+bit bitarray_get(bitarray_t *bitarray, size_t i);
+void bitarray_set(bitarray_t *bitarray, size_t i);
+void bitarray_reset(bitarray_t *bitarray, size_t i);
+void bitarray_set_bit(bitarray_t *bitarray, size_t i, bit val);
+void bitarray_remove(bitarray_t *bitarray);
 
 #endif

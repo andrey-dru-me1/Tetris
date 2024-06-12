@@ -13,13 +13,9 @@ typedef struct {
   size_t rotcnt;
 } figure_t;
 
-struct figure_module {
-  void (*create)(figure_t *figure, size_t rotcnt);
-  bitmatrix_t (*get)(figure_t *figure, size_t i);
-  void (*set)(figure_t *figure, size_t i, bitmatrix_t val);
-  void (*remove)(figure_t *figure);
-};
-
-extern struct figure_module figure;
+void figure_create(figure_t *figure, size_t rotcnt);
+bitmatrix_t figure_get(figure_t *figure, size_t i);
+void figure_set(figure_t *figure, size_t i, bitmatrix_t val);
+void figure_remove(figure_t *figure);
 
 #endif

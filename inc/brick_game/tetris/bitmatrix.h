@@ -9,17 +9,13 @@ typedef struct {
   size_t cols;
 } bitmatrix_t;
 
-struct bitmatrix_module {
-  void (*create)(bitmatrix_t *bitmatrix, size_t rows, size_t cols);
-  bit (*get)(bitmatrix_t *bitmatrix, size_t row, size_t col);
-  void (*set)(bitmatrix_t *bitmatrix, size_t row, size_t col);
-  void (*reset)(bitmatrix_t *bitmatrix, size_t row, size_t col);
-  void (*set_bit)(bitmatrix_t *bitmatrix, size_t row, size_t col, bit val);
-  void (*remove)(bitmatrix_t *bitmatrix);
-  bitmatrix_t (*rotate)(bitmatrix_t *bitmatrix);
-  bitmatrix_t (*flip_vertically)(bitmatrix_t *bitmatrix);
-};
-
-extern struct bitmatrix_module bitmatrix;
+void bitmatrix_create(bitmatrix_t *bitmatrix, size_t rows, size_t cols);
+bit bitmatrix_get(bitmatrix_t *bitmatrix, size_t row, size_t col);
+void bitmatrix_set(bitmatrix_t *bitmatrix, size_t row, size_t col);
+void bitmatrix_reset(bitmatrix_t *bitmatrix, size_t row, size_t col);
+void bitmatrix_set_bit(bitmatrix_t *bitmatrix, size_t row, size_t col, bit val);
+void bitmatrix_remove(bitmatrix_t *bitmatrix);
+bitmatrix_t bitmatrix_rotate(bitmatrix_t *bitmatrix);
+bitmatrix_t bitmatrix_flip_vertically(bitmatrix_t *bitmatrix);
 
 #endif

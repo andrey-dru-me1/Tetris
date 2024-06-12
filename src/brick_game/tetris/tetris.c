@@ -10,10 +10,10 @@
 
 static void generate_figure_set(figure_t *figset) {
   figgen_t figgens[] = {
-      figgen.generate_I_figure, figgen.generate_L_figure,
-      figgen.generate_J_figure, figgen.generate_O_figure,
-      figgen.generate_T_figure, figgen.generate_S_figure,
-      figgen.generate_Z_figure,
+      figgen_generate_I_figure, figgen_generate_L_figure,
+      figgen_generate_J_figure, figgen_generate_O_figure,
+      figgen_generate_T_figure, figgen_generate_S_figure,
+      figgen_generate_Z_figure,
   };
   for (int i = 0; i < 7; i++) {
     figset[i] = figgens[i]();
@@ -25,35 +25,35 @@ figure_t figset[7];
 falling_figure_t ff;
 
 static void launchfig() {
-  falling_figure.create(&ff, figset + (rand() % 7), &field, 0, 3, 0);
+  falling_figure_create(&ff, figset + (rand() % 7), &field, 0, 3, 0);
 }
 
 static void shiftfig() {
-  if (!falling_figure.shift(&ff)) {
-    falling_figure.commit(&ff);
-    falling_figure.remove(&ff);
+  if (!falling_figure_shift(&ff)) {
+    falling_figure_commit(&ff);
+    falling_figure_remove(&ff);
     launchfig();
   }
 }
 
-static void moveright() { falling_figure.move(&ff, ff.row, ff.col + 1); }
+static void moveright() { falling_figure_move(&ff, ff.row, ff.col + 1); }
 
-static void moveleft() { falling_figure.move(&ff, ff.row, ff.col - 1); }
+static void moveleft() { falling_figure_move(&ff, ff.row, ff.col - 1); }
 
-static void rotatefig() { falling_figure.rotate(&ff); }
+static void rotatefig() { falling_figure_rotate(&ff); }
 
 static void initgame() {
-  bitmatrix.create(&field, 12, 10);
+  bitmatrix_create(&field, 12, 10);
   generate_figure_set(figset);
   srand(time(NULL));
   launchfig();
 }
 
 static void endgame() {
-  bitmatrix.remove(&field);
-  falling_figure.remove(&ff);
+  bitmatrix_remove(&field);
+  falling_figure_remove(&ff);
   for (size_t i = 0; i < 7; i++) {
-    figure.remove(figset + i);
+    figure_remove(figset + i);
   }
 }
 
@@ -93,15 +93,15 @@ GameInfo_t updateCurrentState() {
   for (int i = 0; i < 12; i++) {
     intfield[i] = calloc(10, sizeof(int));
     for (int j = 0; j < 10; j++) {
-      intfield[i][j] = bitmatrix.get(&field, i, j);
+      intfield[i][j] = bitmatrix_get(&field, i, j);
     }
   }
-  bitmatrix_t bm = figure.get(ff.fig, ff.rotidx);
+  bitmatrix_t bm = figure_get(ff.fig, ff.rotidx);
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (checkconstraints(ff.row + i, ff.col + j, ff.field->rows,
                            ff.field->cols))
-        intfield[ff.row + i][ff.col + j] |= bitmatrix.get(&bm, i, j);
+        intfield[ff.row + i][ff.col + j] |= bitmatrix_get(&bm, i, j);
     }
   }
   return (GameInfo_t){.field = intfield};
