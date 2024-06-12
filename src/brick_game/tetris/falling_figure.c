@@ -1,7 +1,7 @@
 #include "brick_game/tetris/falling_figure.h"
 
-void falling_figure_create(falling_figure_t *ff, figure_t *fig, field_t *field, int row,
-                   int col, int rotidx) {
+void falling_figure_create(falling_figure_t *ff, figure_t *fig, field_t *field,
+                           int row, int col, int rotidx) {
   *ff = (falling_figure_t){
       .fig = fig, .field = field, .row = row, .col = col, .rotidx = rotidx};
 }
