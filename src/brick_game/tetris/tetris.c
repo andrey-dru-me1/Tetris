@@ -130,5 +130,5 @@ GameInfo_t updateCurrentState() {
         intfield[ff.row + i][ff.col + j] |= bitmatrix_get(&bm, i, j);
     }
   }
-  return (GameInfo_t){.field = intfield};
+  return *game_info;
 }
