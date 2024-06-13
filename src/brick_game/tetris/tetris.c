@@ -1,12 +1,16 @@
 #include "brick_game/tetris/tetris.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "brick_game/tetris/falling_figure.h"
 #include "brick_game/tetris/field.h"
 #include "brick_game/tetris/figgen.h"
 #include "brick_game/tetris/figure.h"
+
+#define WIDTH 10
+#define HEIGHT 20
 
 static void generate_figure_set(figure_t *figset) {
   figgen_t figgens[] = {
@@ -43,7 +47,7 @@ static void moveleft() { falling_figure_move(&ff, ff.row, ff.col - 1); }
 static void rotatefig() { falling_figure_rotate(&ff); }
 
 static void initgame() {
-  bitmatrix_create(&field, 12, 10);
+  bitmatrix_create(&field, HEIGHT, WIDTH);
   generate_figure_set(figset);
   srand(time(NULL));
   launchfig();
@@ -82,17 +86,39 @@ void userInput(UserAction_t action, bool hold) {
   }
 }
 
-#include <stdlib.h>
-
 static bool checkconstraints(int row, int col, int width, int height) {
   return row >= 0 && row < width && col >= 0 && col < height;
 }
 
+static GameInfo_t *get_game_info() {
+  static int _intfield[HEIGHT][WIDTH];
+  static int *intfield[HEIGHT];
+
+  static int _nextfig[4][4];
+  static int *nextfig[4];
+
+  static GameInfo_t game_info = {.field = intfield, .next = nextfig};
+
+  static bool initialized = false;
+
+  if (!initialized) {
+    for (size_t i = 0; i < HEIGHT; i++) intfield[i] = _intfield[i];
+    for (size_t i = 0; i < 4; i++) nextfig[i] = _nextfig[i];
+
+    memset(_intfield, 0, WIDTH * HEIGHT * sizeof(**_intfield));
+    memset(_nextfig, 0, 4 * 4 * sizeof(**_nextfig));
+
+    initialized = true;
+  }
+
+  return &game_info;
+}
+
 GameInfo_t updateCurrentState() {
-  int **intfield = calloc(12, sizeof(int *));
-  for (int i = 0; i < 12; i++) {
-    intfield[i] = calloc(10, sizeof(int));
-    for (int j = 0; j < 10; j++) {
+  GameInfo_t *game_info = get_game_info();
+  int **intfield = game_info->field;
+  for (int i = 0; i < HEIGHT; i++) {
+    for (int j = 0; j < WIDTH; j++) {
       intfield[i][j] = bitmatrix_get(&field, i, j);
     }
   }

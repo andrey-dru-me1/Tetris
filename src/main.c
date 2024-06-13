@@ -3,6 +3,9 @@
 
 #include "brick_game/tetris/tetris.h"
 
+#define WIDTH 10
+#define HEIGHT 20
+
 int main(void) {
   int game = 1;
   userInput(Start, false);
@@ -12,11 +15,11 @@ int main(void) {
     // printf("\e[1;1H\e[2J");
 
     printf("+");
-    for (int i = 0; i < 10 * 2; i++) printf("-");
+    for (int i = 0; i < WIDTH * 2; i++) printf("-");
     printf("+\n");
 
-    for (int i = 0; i < 12; i++) {
-      for (int j = 0; j < 10; j++) {
+    for (int i = 0; i < HEIGHT; i++) {
+      for (int j = 0; j < WIDTH; j++) {
         if (gameInfo.field[i][j])
           printf("OO");
         else
@@ -26,11 +29,8 @@ int main(void) {
     }
 
     printf("+");
-    for (int i = 0; i < 10 * 2; i++) printf("-");
+    for (int i = 0; i < WIDTH * 2; i++) printf("-");
     printf("+\n");
-
-    for (int i = 0; i < 12; i++) free(gameInfo.field[i]);
-    free(gameInfo.field);
 
     char c;
     scanf("%c", &c);
