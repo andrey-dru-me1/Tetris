@@ -4,11 +4,11 @@
 
 void bitarray_create(bitarray_t *bitarray, size_t n) {
   size_t actual_len = (n - 1) / 8 + 1;
-  bitarray->val = calloc(actual_len, sizeof(bit));
+  bitarray->val = calloc(actual_len, sizeof(bit_t));
   bitarray->n = n;
 }
 
-bit bitarray_get(bitarray_t *bitarray, size_t i) {
+bit_t bitarray_get(bitarray_t *bitarray, size_t i) {
   return (bitarray->val[i / 8] >> (i % 8)) & 0b1u;
 }
 
@@ -20,7 +20,7 @@ void bitarray_reset(bitarray_t *bitarray, size_t i) {
   bitarray->val[i / 8] &= ~(1u << (i % 8));
 }
 
-void bitarray_set_bit(bitarray_t *bitarray, size_t i, bit val) {
+void bitarray_set_bit(bitarray_t *bitarray, size_t i, bit_t val) {
   if (val == 1)
     bitarray_set(bitarray, i);
   else if (val == 0)

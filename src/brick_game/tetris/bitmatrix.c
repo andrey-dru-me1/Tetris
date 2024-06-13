@@ -6,7 +6,7 @@ void bitmatrix_create(bitmatrix_t *bitmatrix, size_t rows, size_t cols) {
   bitmatrix->cols = cols;
 }
 
-bit bitmatrix_get(bitmatrix_t *bitmatrix, size_t row, size_t col) {
+bit_t bitmatrix_get(bitmatrix_t *bitmatrix, size_t row, size_t col) {
   return bitarray_get(&bitmatrix->val, row * bitmatrix->cols + col);
 }
 
@@ -19,7 +19,7 @@ void bitmatrix_reset(bitmatrix_t *bitmatrix, size_t row, size_t col) {
 }
 
 void bitmatrix_set_bit(bitmatrix_t *bitmatrix, size_t row, size_t col,
-                       bit val) {
+                       bit_t val) {
   bitarray_set_bit(&bitmatrix->val, row * bitmatrix->cols + col, val);
 }
 
