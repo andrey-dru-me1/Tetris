@@ -32,9 +32,7 @@ struct timeval next;
 
 #define SHIFT_INTERVAL 500000
 
-#include <stdio.h>
 static void dropline(size_t droprow) {
-  // fprintf(stderr, "dropline\n");
   for (size_t row = droprow; row > 0; row--) {
     for (size_t col = 0; col < field.cols; col++) {
       bitmatrix_set_bit(&field, row, col,
@@ -54,7 +52,6 @@ static int droplines() {
       dropline(row);
       dropcount++;
     }
-    fprintf(stderr, "row: %lu, linefilled: %d\n", row, linefilled);
   }
   return dropcount;
 }
