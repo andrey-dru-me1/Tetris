@@ -1,21 +1,28 @@
 #include <curses.h>
 #include <locale.h>
+#include <unistd.h>
 
 #include "brick_game/tetris/tetris.h"
 
 #define WIDTH 10
 #define HEIGHT 20
 
+#define SET_SQUARE bkgdset(COLOR_PAIR(1))
+#define SET_SPACE bkgdset(COLOR_PAIR(2))
+#define RESET_COLOR bkgdset(COLOR_PAIR(0))
+
 int main(void) {
   setlocale(LC_ALL, "");
   WINDOW *stdscr = initscr();
   cbreak();
   noecho();
+  nodelay(stdscr, TRUE);
   intrflush(stdscr, FALSE);
   keypad(stdscr, TRUE);
   start_color();
 
-  printf("lol");
+  init_pair(1, COLOR_WHITE, COLOR_WHITE);
+  init_pair(2, COLOR_WHITE, COLOR_BLACK);
 
   int game = 1;
   userInput(Start, false);
@@ -30,13 +37,15 @@ int main(void) {
 
     for (int i = 0; i < HEIGHT; i++) {
       for (int j = 0; j < WIDTH; j++) {
-        if (gameInfo.field[i][j])
-          addstr("OO");
-        else
-          addstr("  ");
+        if (gameInfo.field[i][j]) SET_SQUARE;
+        else SET_SPACE;
+        addstr("  ");
       }
+      RESET_COLOR;
       addstr("\n\r");
     }
+
+    usleep(10000); // 1/100 sec
 
     addstr("+");
     for (int i = 0; i < WIDTH * 2; i++) addstr("-");
@@ -44,6 +53,8 @@ int main(void) {
     // refresh();
 
     int c = getch();
+    if (c == ERR)
+      continue;
     switch (c) {
       case 'q':
         userInput(Terminate, false);
