@@ -32,6 +32,33 @@ struct timeval next;
 
 #define SHIFT_INTERVAL 500000
 
+#include <stdio.h>
+static void dropline(size_t droprow) {
+  // fprintf(stderr, "dropline\n");
+  for (size_t row = droprow; row > 0; row--) {
+    for (size_t col = 0; col < field.cols; col++) {
+      bitmatrix_set_bit(&field, row, col,
+                        bitmatrix_get(&field, row - 1, col));
+    }
+  }
+}
+
+static int droplines() {
+  int dropcount = 0;
+  for (size_t row = 0; row < field.rows; row++) {
+    bool linefilled = true;
+    for (size_t col = 0;
+         col < field.cols && (linefilled = bitmatrix_get(&field, row, col));
+         col++);
+    if (linefilled) {
+      dropline(row);
+      dropcount++;
+    }
+    fprintf(stderr, "row: %lu, linefilled: %d\n", row, linefilled);
+  }
+  return dropcount;
+}
+
 static void launchfig() {
   falling_figure_create(&ff, figset + (rand() % 7), &field, 0, 3, 0);
 }
@@ -40,6 +67,7 @@ static void shiftfig() {
   if (!falling_figure_shift(&ff)) {
     falling_figure_commit(&ff);
     falling_figure_remove(&ff);
+    droplines();
     launchfig();
   }
 }
@@ -56,11 +84,7 @@ static void initgame() {
   srand(time(NULL));
   launchfig();
 
-  struct timeval now;
-  gettimeofday(&now, NULL);
-  next = (struct timeval){
-      .tv_sec = now.tv_sec + ((now.tv_usec + SHIFT_INTERVAL) / (long)1e6),
-      .tv_usec = (now.tv_usec + SHIFT_INTERVAL) % (long)1e6};
+  gettimeofday(&next, NULL);
 }
 
 static void endgame() {
