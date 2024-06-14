@@ -162,6 +162,7 @@ GameInfo_t updateCurrentState() {
       intfield[i][j] = bitmatrix_get(&field, i, j);
     }
   }
+
   bitmatrix_t bm = figure_get(ff.fig, ff.rotidx);
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
@@ -170,5 +171,17 @@ GameInfo_t updateCurrentState() {
         intfield[ff.row + i][ff.col + j] |= bitmatrix_get(&bm, i, j);
     }
   }
+
+  int prevrow = ff.row;
+  while(falling_figure_shift(&ff));
+  for (int i = 0; i < bm.rows; i++) {
+    for (int j = 0; j < bm.cols; j++) {
+      if (checkconstraints(ff.row + i, ff.col + j, ff.field->rows,
+                           ff.field->cols))
+        intfield[ff.row + i][ff.col + j] |= bitmatrix_get(&bm, i, j) * 2;
+    }
+  }
+  ff.row = prevrow;
+
   return *game_info;
 }

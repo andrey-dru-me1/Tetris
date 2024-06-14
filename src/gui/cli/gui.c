@@ -22,7 +22,7 @@ int main(void) {
   start_color();
 
   init_pair(1, COLOR_WHITE, COLOR_WHITE);
-  init_pair(2, COLOR_WHITE, COLOR_BLACK);
+  init_pair(2, COLOR_YELLOW, COLOR_BLACK);
 
   int game = 1;
   userInput(Start, false);
@@ -32,29 +32,38 @@ int main(void) {
     move(0, 0);
 
     addstr("+");
-    for (int i = 0; i < WIDTH * 2; i++) addstr("-");
+    for (int i = 0; i < WIDTH * 2-2; i++) addstr("-");
     addstr("+\n");
 
     for (int i = 0; i < HEIGHT; i++) {
       for (int j = 0; j < WIDTH; j++) {
-        if (gameInfo.field[i][j]) SET_SQUARE;
-        else SET_SPACE;
-        addstr("  ");
+        bool square = false;
+        if (gameInfo.field[i][j] & 1u) {
+          SET_SQUARE;
+          square = true;
+        }
+        else {
+          SET_SPACE;
+        }
+        if ((gameInfo.field[i][j] & 0b10u) && !square) {
+          addch(ACS_BOARD);
+          addch(ACS_BOARD);
+        } else
+          addstr("  ");
       }
       RESET_COLOR;
       addstr("\n\r");
     }
 
-    usleep(10000); // 1/100 sec
+    usleep(10000);  // 1/100 sec
 
     addstr("+");
-    for (int i = 0; i < WIDTH * 2; i++) addstr("-");
+    for (int i = 0; i < WIDTH * 2-2; i++) addstr("-");
     addstr("+\n\r");
     // refresh();
 
     int c = getch();
-    if (c == ERR)
-      continue;
+    if (c == ERR) continue;
     switch (c) {
       case 'q':
         userInput(Terminate, false);
