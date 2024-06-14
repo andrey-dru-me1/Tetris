@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 #include <time.h>
 
 #include "brick_game/tetris/falling_figure.h"
@@ -27,6 +28,9 @@ static void generate_figure_set(figure_t *figset) {
 field_t field;
 figure_t figset[7];
 falling_figure_t ff;
+struct timeval next;
+
+#define SHIFT_INTERVAL 500000
 
 static void launchfig() {
   falling_figure_create(&ff, figset + (rand() % 7), &field, 0, 3, 0);
@@ -51,6 +55,12 @@ static void initgame() {
   generate_figure_set(figset);
   srand(time(NULL));
   launchfig();
+
+  struct timeval now;
+  gettimeofday(&now, NULL);
+  next = (struct timeval){
+      .tv_sec = now.tv_sec + ((now.tv_usec + SHIFT_INTERVAL) / (long)1e6),
+      .tv_usec = (now.tv_usec + SHIFT_INTERVAL) % (long)1e6};
 }
 
 static void endgame() {
@@ -115,6 +125,15 @@ static GameInfo_t *get_game_info() {
 }
 
 GameInfo_t updateCurrentState() {
+  struct timeval now;
+  gettimeofday(&now, NULL);
+  if (now.tv_sec > next.tv_sec && now.tv_usec > next.tv_usec) {
+    shiftfig();
+    next = (struct timeval){
+        .tv_sec = next.tv_sec + ((next.tv_usec + SHIFT_INTERVAL) / (long)1e6),
+        .tv_usec = (next.tv_usec + SHIFT_INTERVAL) % (long)1e6};
+  }
+
   GameInfo_t *game_info = get_game_info();
   int **intfield = game_info->field;
   for (int i = 0; i < HEIGHT; i++) {
