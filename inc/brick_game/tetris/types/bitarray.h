@@ -6,7 +6,7 @@
 #include "brick_game/tetris/types/bit.h"
 
 typedef struct {
-  bit_t *val;
+  bit_t *bits;
   size_t n;
 } bitarray_t;
 

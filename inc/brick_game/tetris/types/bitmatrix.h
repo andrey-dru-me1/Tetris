@@ -4,7 +4,7 @@
 #include "brick_game/tetris/types/bitarray.h"
 
 typedef struct {
-  bitarray_t val;
+  bitarray_t ba;
   size_t rows;
   size_t cols;
 } bitmatrix_t;

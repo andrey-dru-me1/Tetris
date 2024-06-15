@@ -1,30 +1,30 @@
 #include "brick_game/tetris/types/bitmatrix.h"
 
 void bitmatrix_create(bitmatrix_t *bitmatrix, size_t rows, size_t cols) {
-  bitarray_create(&bitmatrix->val, rows * cols);
+  bitarray_create(&bitmatrix->ba, rows * cols);
   bitmatrix->rows = rows;
   bitmatrix->cols = cols;
 }
 
 bit_t bitmatrix_get(bitmatrix_t *bitmatrix, size_t row, size_t col) {
-  return bitarray_get(&bitmatrix->val, row * bitmatrix->cols + col);
+  return bitarray_get(&bitmatrix->ba, row * bitmatrix->cols + col);
 }
 
 void bitmatrix_set(bitmatrix_t *bitmatrix, size_t row, size_t col) {
-  bitarray_set(&bitmatrix->val, row * bitmatrix->cols + col);
+  bitarray_set(&bitmatrix->ba, row * bitmatrix->cols + col);
 }
 
 void bitmatrix_reset(bitmatrix_t *bitmatrix, size_t row, size_t col) {
-  bitarray_reset(&bitmatrix->val, row * bitmatrix->cols + col);
+  bitarray_reset(&bitmatrix->ba, row * bitmatrix->cols + col);
 }
 
 void bitmatrix_set_bit(bitmatrix_t *bitmatrix, size_t row, size_t col,
                        bit_t val) {
-  bitarray_set_bit(&bitmatrix->val, row * bitmatrix->cols + col, val);
+  bitarray_set_bit(&bitmatrix->ba, row * bitmatrix->cols + col, val);
 }
 
 void bitmatrix_remove(bitmatrix_t *bitmatrix) {
-  bitarray_remove(&bitmatrix->val);
+  bitarray_remove(&bitmatrix->ba);
 }
 
 bitmatrix_t bitmatrix_rotate(bitmatrix_t *bitmatrix) {
