@@ -14,7 +14,7 @@ typedef struct {
   int rotidx;
 } falling_figure_t;
 
-void falling_figure_create(falling_figure_t *ff, figure_t *fig, field_t *field,
+bool falling_figure_create(falling_figure_t *ff, figure_t *fig, field_t *field,
                            int row, int col, int rotidx);
 bool falling_figure_rotate(falling_figure_t *ff);
 bool falling_figure_shift(falling_figure_t *ff);

@@ -4,5 +4,6 @@
 #include "brick_game/tetris/figure.h"
 
 figure_t *figset();
+void figset_free();
 
 #endif

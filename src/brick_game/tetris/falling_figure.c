@@ -1,12 +1,6 @@
 #include "brick_game/tetris/falling_figure.h"
 
-void falling_figure_create(falling_figure_t *ff, figure_t *fig, field_t *field,
-                           int row, int col, int rotidx) {
-  *ff = (falling_figure_t){
-      .fig = fig, .field = field, .row = row, .col = col, .rotidx = rotidx};
-}
-
-bool falling_figure_validate(falling_figure_t *ff) {
+static bool falling_figure_validate(falling_figure_t *ff) {
   bool does_overlap = false;
 
   bitmatrix_t bm = figure_get(ff->fig, ff->rotidx);
@@ -22,6 +16,13 @@ bool falling_figure_validate(falling_figure_t *ff) {
   }
 
   return !does_overlap;
+}
+
+bool falling_figure_create(falling_figure_t *ff, figure_t *fig, field_t *field,
+                           int row, int col, int rotidx) {
+  *ff = (falling_figure_t){
+      .fig = fig, .field = field, .row = row, .col = col, .rotidx = rotidx};
+  return falling_figure_validate(ff);
 }
 
 bool falling_figure_rotate(falling_figure_t *ff) {

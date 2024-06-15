@@ -13,6 +13,21 @@
 #define WIDTH 10
 #define HEIGHT 20
 
+static void dropline(size_t droprow);
+static int droplines();
+
+static void launchfig();
+static void shiftfig();
+static void moveright();
+static void moveleft();
+static void rotatefig();
+
+static void initgame();
+static void endgame();
+
+static bool checkconstraints(int row, int col, int width, int height);
+static GameInfo_t *get_game_info();
+
 field_t field;
 falling_figure_t ff;
 struct timeval next;
@@ -43,7 +58,10 @@ static int droplines() {
 }
 
 static void launchfig() {
-  falling_figure_create(&ff, figset() + (rand() % 7), &field, 0, 3, 0);
+  if (!falling_figure_create(&ff, figset() + (rand() % 7), &field, 0, 3, 0)) {
+    endgame();
+    initgame();
+  }
 }
 
 static void shiftfig() {
@@ -72,9 +90,7 @@ static void initgame() {
 static void endgame() {
   bitmatrix_remove(&field);
   falling_figure_remove(&ff);
-  for (size_t i = 0; i < 7; i++) {
-    figure_remove(figset() + i);
-  }
+  figset_free();
 }
 
 void userInput(UserAction_t action, bool hold) {
