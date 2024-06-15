@@ -1,7 +1,7 @@
 #ifndef FIGURE_H_684651
 #define FIGURE_H_684651
 
-#include "brick_game/tetris/bitmatrix.h"
+#include "brick_game/tetris/types/bitmatrix.h"
 
 /**
  * `figure_t` type contains array of rotations and length of this array. Each

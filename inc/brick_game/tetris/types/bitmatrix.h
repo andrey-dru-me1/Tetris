@@ -1,7 +1,7 @@
 #ifndef BITMATRIX_H_78651
 #define BITMATRIX_H_78651
 
-#include "brick_game/tetris/bitarray.h"
+#include "brick_game/tetris/types/bitarray.h"
 
 typedef struct {
   bitarray_t val;

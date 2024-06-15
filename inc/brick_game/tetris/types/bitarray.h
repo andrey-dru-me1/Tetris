@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#include "brick_game/tetris/bit.h"
+#include "brick_game/tetris/types/bit.h"
 
 typedef struct {
   bit_t *val;
