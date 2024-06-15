@@ -9,12 +9,14 @@
 
 #define SET_SQUARE bkgdset(COLOR_PAIR(1))
 #define SET_SPACE bkgdset(COLOR_PAIR(2))
+#define SET_BORDER bkgdset(COLOR_PAIR(3))
 #define RESET_COLOR bkgdset(COLOR_PAIR(0))
 
 static void init_curses() {
   setlocale(LC_ALL, "");
   WINDOW *stdscr = initscr();
   cbreak();
+  curs_set(0);
   noecho();
   nodelay(stdscr, TRUE);
   intrflush(stdscr, FALSE);
@@ -23,16 +25,25 @@ static void init_curses() {
 
   init_pair(1, COLOR_WHITE, COLOR_WHITE);
   init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(3, COLOR_WHITE, COLOR_GREEN);
+}
+
+static void print_border() {
+  SET_BORDER;
+  move(0, 0);
+  for (int i = 0; i < WIDTH + 2; i++) addstr("  ");
+  move(HEIGHT + 1, 0);
+  for (int i = 0; i < WIDTH + 2; i++) addstr("  ");
+
+  for (int i = 0; i < HEIGHT + 1; i++) {
+    mvaddstr(i + 1, 0, "  ");
+    mvaddstr(i + 1, WIDTH * 2 + 2, "  ");
+  }
 }
 
 static void print_field(GameInfo_t game_info) {
-  move(0, 0);
-
-  addstr("+");
-  for (int i = 0; i < WIDTH * 2 - 2; i++) addstr("-");
-  addstr("+\n");
-
   for (int i = 0; i < HEIGHT; i++) {
+    move(i + 1, 2);
     for (int j = 0; j < WIDTH; j++) {
       bool square = false;
       if (game_info.field[i][j] & 1u) {
@@ -48,12 +59,8 @@ static void print_field(GameInfo_t game_info) {
         addstr("  ");
     }
     RESET_COLOR;
-    addstr("\n\r");
   }
-
-  addstr("+");
-  for (int i = 0; i < WIDTH * 2 - 2; i++) addstr("-");
-  addstr("+\n\r");
+  refresh();
 }
 
 static int handle_user_input() {
@@ -78,6 +85,9 @@ static int handle_user_input() {
       case 'w':
         userInput(Up, false);
         break;
+      case ' ':
+        userInput(Action, false);
+        break;
     }
   }
   return game;
@@ -85,6 +95,7 @@ static int handle_user_input() {
 
 int main(void) {
   init_curses();
+  print_border();
 
   int game = 1;
   userInput(Start, false);

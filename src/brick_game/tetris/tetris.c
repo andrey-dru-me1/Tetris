@@ -4,7 +4,6 @@
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
-#include <stdio.h>
 
 #include "brick_game/tetris/falling_figure.h"
 #include "brick_game/tetris/field.h"
@@ -74,6 +73,10 @@ static void shiftfig() {
   }
 }
 
+static void movefigdown() {
+  while (field_shiftfig(&field));
+}
+
 static void moveright() {
   field_movefig(&field, field.ff.row, field.ff.col + 1);
 }
@@ -117,6 +120,9 @@ void userInput(UserAction_t action, bool hold) {
       break;
     case Terminate:
       endgame();
+      break;
+    case Action:
+      movefigdown();
       break;
     default:
       break;
