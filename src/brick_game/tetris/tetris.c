@@ -7,26 +7,13 @@
 
 #include "brick_game/tetris/falling_figure.h"
 #include "brick_game/tetris/field.h"
-#include "brick_game/tetris/figgen.h"
+#include "brick_game/tetris/figset.h"
 #include "brick_game/tetris/figure.h"
 
 #define WIDTH 10
 #define HEIGHT 20
 
-static void generate_figure_set(figure_t *figset) {
-  figgen_t figgens[] = {
-      figgen_generate_I_figure, figgen_generate_L_figure,
-      figgen_generate_J_figure, figgen_generate_O_figure,
-      figgen_generate_T_figure, figgen_generate_S_figure,
-      figgen_generate_Z_figure,
-  };
-  for (int i = 0; i < 7; i++) {
-    figset[i] = figgens[i]();
-  }
-}
-
 field_t field;
-figure_t figset[7];
 falling_figure_t ff;
 struct timeval next;
 
@@ -35,8 +22,7 @@ struct timeval next;
 static void dropline(size_t droprow) {
   for (size_t row = droprow; row > 0; row--) {
     for (size_t col = 0; col < field.cols; col++) {
-      bitmatrix_set_bit(&field, row, col,
-                        bitmatrix_get(&field, row - 1, col));
+      bitmatrix_set_bit(&field, row, col, bitmatrix_get(&field, row - 1, col));
     }
   }
 }
@@ -57,7 +43,7 @@ static int droplines() {
 }
 
 static void launchfig() {
-  falling_figure_create(&ff, figset + (rand() % 7), &field, 0, 3, 0);
+  falling_figure_create(&ff, figset() + (rand() % 7), &field, 0, 3, 0);
 }
 
 static void shiftfig() {
@@ -77,7 +63,6 @@ static void rotatefig() { falling_figure_rotate(&ff); }
 
 static void initgame() {
   bitmatrix_create(&field, HEIGHT, WIDTH);
-  generate_figure_set(figset);
   srand(time(NULL));
   launchfig();
 
@@ -88,7 +73,7 @@ static void endgame() {
   bitmatrix_remove(&field);
   falling_figure_remove(&ff);
   for (size_t i = 0; i < 7; i++) {
-    figure_remove(figset + i);
+    figure_remove(figset() + i);
   }
 }
 
@@ -173,7 +158,7 @@ GameInfo_t updateCurrentState() {
   }
 
   int prevrow = ff.row;
-  while(falling_figure_shift(&ff));
+  while (falling_figure_shift(&ff));
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (checkconstraints(ff.row + i, ff.col + j, ff.field->rows,

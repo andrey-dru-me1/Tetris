@@ -1,6 +1,8 @@
-#include "brick_game/tetris/figgen.h"
+#include "brick_game/tetris/figset.h"
 
-figure_t figgen_generate_I_figure() {
+#include <stdbool.h>
+
+static figure_t figgen_generate_I_figure() {
   figure_t figI;
   figure_create(&figI, 2);
 
@@ -14,7 +16,7 @@ figure_t figgen_generate_I_figure() {
   return figI;
 }
 
-figure_t figgen_generate_L_figure() {
+static figure_t figgen_generate_L_figure() {
   figure_t figL;
   figure_create(&figL, 4);
 
@@ -32,7 +34,7 @@ figure_t figgen_generate_L_figure() {
   return figL;
 }
 
-figure_t figgen_generate_J_figure() {
+static figure_t figgen_generate_J_figure() {
   figure_t figJ = figgen_generate_L_figure();
   for (size_t i = 0; i < figJ.rotcnt; i++) {
     bitmatrix_t rot = figure_get(&figJ, i);
@@ -42,7 +44,7 @@ figure_t figgen_generate_J_figure() {
   return figJ;
 }
 
-figure_t figgen_generate_T_figure() {
+static figure_t figgen_generate_T_figure() {
   figure_t figT;
   figure_create(&figT, 4);
 
@@ -61,7 +63,7 @@ figure_t figgen_generate_T_figure() {
   return figT;
 }
 
-figure_t figgen_generate_O_figure() {
+static figure_t figgen_generate_O_figure() {
   figure_t figO;
   figure_create(&figO, 1);
 
@@ -76,7 +78,7 @@ figure_t figgen_generate_O_figure() {
   return figO;
 }
 
-figure_t figgen_generate_S_figure() {
+static figure_t figgen_generate_S_figure() {
   figure_t figS;
   figure_create(&figS, 2);
 
@@ -94,7 +96,7 @@ figure_t figgen_generate_S_figure() {
   return figS;
 }
 
-figure_t figgen_generate_Z_figure() {
+static figure_t figgen_generate_Z_figure() {
   figure_t figZ = figgen_generate_S_figure();
   for (size_t i = 0; i < figZ.rotcnt; i++) {
     bitmatrix_t rot = figure_get(&figZ, i);
@@ -102,4 +104,26 @@ figure_t figgen_generate_Z_figure() {
     bitmatrix_remove(&rot);
   }
   return figZ;
+}
+
+figure_t *figset() {
+  static figure_t _figset[7];
+  static bool initialized = false;
+
+  if (!initialized) {
+    typedef figure_t (*figgen_t)();
+
+    figgen_t figgens[] = {
+        figgen_generate_I_figure, figgen_generate_L_figure,
+        figgen_generate_J_figure, figgen_generate_O_figure,
+        figgen_generate_T_figure, figgen_generate_S_figure,
+        figgen_generate_Z_figure,
+    };
+    for (int i = 0; i < 7; i++) {
+      _figset[i] = figgens[i]();
+    }
+    initialized = true;
+  }
+
+  return _figset;
 }
