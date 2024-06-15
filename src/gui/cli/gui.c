@@ -11,7 +11,7 @@
 #define SET_SPACE bkgdset(COLOR_PAIR(2))
 #define RESET_COLOR bkgdset(COLOR_PAIR(0))
 
-int main(void) {
+static void init_curses() {
   setlocale(LC_ALL, "");
   WINDOW *stdscr = initscr();
   cbreak();
@@ -23,47 +23,44 @@ int main(void) {
 
   init_pair(1, COLOR_WHITE, COLOR_WHITE);
   init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+}
 
-  int game = 1;
-  userInput(Start, false);
-  while (game) {
-    GameInfo_t gameInfo = updateCurrentState();
+static void print_field(GameInfo_t game_info) {
+  move(0, 0);
 
-    move(0, 0);
+  addstr("+");
+  for (int i = 0; i < WIDTH * 2 - 2; i++) addstr("-");
+  addstr("+\n");
 
-    addstr("+");
-    for (int i = 0; i < WIDTH * 2-2; i++) addstr("-");
-    addstr("+\n");
-
-    for (int i = 0; i < HEIGHT; i++) {
-      for (int j = 0; j < WIDTH; j++) {
-        bool square = false;
-        if (gameInfo.field[i][j] & 1u) {
-          SET_SQUARE;
-          square = true;
-        }
-        else {
-          SET_SPACE;
-        }
-        if ((gameInfo.field[i][j] & 0b10u) && !square) {
-          addch(ACS_BOARD);
-          addch(ACS_BOARD);
-        } else
-          addstr("  ");
+  for (int i = 0; i < HEIGHT; i++) {
+    for (int j = 0; j < WIDTH; j++) {
+      bool square = false;
+      if (game_info.field[i][j] & 1u) {
+        SET_SQUARE;
+        square = true;
+      } else {
+        SET_SPACE;
       }
-      RESET_COLOR;
-      addstr("\n\r");
+      if ((game_info.field[i][j] & 0b10u) && !square) {
+        addch(ACS_BOARD);
+        addch(ACS_BOARD);
+      } else
+        addstr("  ");
     }
+    RESET_COLOR;
+    addstr("\n\r");
+  }
 
-    usleep(10000);  // 1/100 sec
+  addstr("+");
+  for (int i = 0; i < WIDTH * 2 - 2; i++) addstr("-");
+  addstr("+\n\r");
+}
 
-    addstr("+");
-    for (int i = 0; i < WIDTH * 2-2; i++) addstr("-");
-    addstr("+\n\r");
-    // refresh();
+static int handle_user_input() {
+  int game = 1;
 
-    int c = getch();
-    if (c == ERR) continue;
+  int c = getch();
+  if (c != ERR) {
     switch (c) {
       case 'q':
         userInput(Terminate, false);
@@ -82,6 +79,23 @@ int main(void) {
         userInput(Up, false);
         break;
     }
+  }
+  return game;
+}
+
+int main(void) {
+  init_curses();
+
+  int game = 1;
+  userInput(Start, false);
+  while (game) {
+    GameInfo_t game_info = updateCurrentState();
+
+    print_field(game_info);
+
+    usleep(10000);  // 1/100 sec
+
+    game = handle_user_input();
   }
 
   endwin();
