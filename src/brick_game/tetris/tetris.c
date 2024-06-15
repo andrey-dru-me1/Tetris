@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
+#include <stdio.h>
 
 #include "brick_game/tetris/falling_figure.h"
 #include "brick_game/tetris/field.h"
@@ -29,25 +30,25 @@ static bool checkconstraints(int row, int col, int width, int height);
 static GameInfo_t *get_game_info();
 
 field_t field;
-falling_figure_t ff;
 struct timeval next;
 
 #define SHIFT_INTERVAL 500000
 
 static void dropline(size_t droprow) {
   for (size_t row = droprow; row > 0; row--) {
-    for (size_t col = 0; col < field.cols; col++) {
-      bitmatrix_set_bit(&field, row, col, bitmatrix_get(&field, row - 1, col));
+    for (size_t col = 0; col < field.bm.cols; col++) {
+      bitmatrix_set_bit(&field.bm, row, col,
+                        bitmatrix_get(&field.bm, row - 1, col));
     }
   }
 }
 
 static int droplines() {
   int dropcount = 0;
-  for (size_t row = 0; row < field.rows; row++) {
+  for (size_t row = 0; row < field.bm.rows; row++) {
     bool linefilled = true;
-    for (size_t col = 0;
-         col < field.cols && (linefilled = bitmatrix_get(&field, row, col));
+    for (size_t col = 0; col < field.bm.cols &&
+                         (linefilled = bitmatrix_get(&field.bm, row, col));
          col++);
     if (linefilled) {
       dropline(row);
@@ -58,29 +59,33 @@ static int droplines() {
 }
 
 static void launchfig() {
-  if (!falling_figure_create(&ff, figset() + (rand() % 7), &field, 0, 3, 0)) {
+  if (!field_spawnfig(&field, figset() + (rand() % 7), 0, 3, 0)) {
     endgame();
     initgame();
   }
 }
 
 static void shiftfig() {
-  if (!falling_figure_shift(&ff)) {
-    falling_figure_commit(&ff);
-    falling_figure_remove(&ff);
+  if (!field_shiftfig(&field)) {
+    field_commitfig(&field);
+    field_removefig(&field);
     droplines();
     launchfig();
   }
 }
 
-static void moveright() { falling_figure_move(&ff, ff.row, ff.col + 1); }
+static void moveright() {
+  field_movefig(&field, field.ff.row, field.ff.col + 1);
+}
 
-static void moveleft() { falling_figure_move(&ff, ff.row, ff.col - 1); }
+static void moveleft() {
+  field_movefig(&field, field.ff.row, field.ff.col - 1);
+}
 
-static void rotatefig() { falling_figure_rotate(&ff); }
+static void rotatefig() { field_rotatefig(&field); }
 
 static void initgame() {
-  bitmatrix_create(&field, HEIGHT, WIDTH);
+  bitmatrix_create(&field.bm, HEIGHT, WIDTH);
   srand(time(NULL));
   launchfig();
 
@@ -88,8 +93,8 @@ static void initgame() {
 }
 
 static void endgame() {
-  bitmatrix_remove(&field);
-  falling_figure_remove(&ff);
+  bitmatrix_remove(&field.bm);
+  field_removefig(&field);
   figset_free();
 }
 
@@ -160,29 +165,29 @@ GameInfo_t updateCurrentState() {
   int **intfield = game_info->field;
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
-      intfield[i][j] = bitmatrix_get(&field, i, j);
+      intfield[i][j] = bitmatrix_get(&field.bm, i, j);
     }
   }
 
-  bitmatrix_t bm = figure_get(ff.fig, ff.rotidx);
+  bitmatrix_t bm = figure_get(field.ff.fig, field.ff.rotidx);
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
-      if (checkconstraints(ff.row + i, ff.col + j, ff.field->rows,
-                           ff.field->cols))
-        intfield[ff.row + i][ff.col + j] |= bitmatrix_get(&bm, i, j);
+      if (checkconstraints(field.ff.row + i, field.ff.col + j, field.bm.rows,
+                           field.bm.cols))
+        intfield[field.ff.row + i][field.ff.col + j] |= bitmatrix_get(&bm, i, j);
     }
   }
 
-  int prevrow = ff.row;
-  while (falling_figure_shift(&ff));
+  int prevrow = field.ff.row;
+  while (field_shiftfig(&field));
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
-      if (checkconstraints(ff.row + i, ff.col + j, ff.field->rows,
-                           ff.field->cols))
-        intfield[ff.row + i][ff.col + j] |= bitmatrix_get(&bm, i, j) * 2;
+      if (checkconstraints(field.ff.row + i, field.ff.col + j, field.bm.rows,
+                           field.bm.cols))
+        intfield[field.ff.row + i][field.ff.col + j] |= bitmatrix_get(&bm, i, j) * 2;
     }
   }
-  ff.row = prevrow;
+  field.ff.row = prevrow;
 
   return *game_info;
 }

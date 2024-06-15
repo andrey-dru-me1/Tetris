@@ -90,11 +90,8 @@ int main(void) {
   userInput(Start, false);
   while (game) {
     GameInfo_t game_info = updateCurrentState();
-
     print_field(game_info);
-
     usleep(10000);  // 1/100 sec
-
     game = handle_user_input();
   }
 
