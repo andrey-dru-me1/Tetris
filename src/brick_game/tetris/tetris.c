@@ -75,6 +75,10 @@ static void shiftfig() {
 
 static void movefigdown() {
   while (field_shiftfig(&field));
+  field_commitfig(&field);
+  field_removefig(&field);
+  droplines();
+  launchfig();
 }
 
 static void moveright() {
