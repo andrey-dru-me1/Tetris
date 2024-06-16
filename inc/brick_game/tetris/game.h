@@ -9,13 +9,12 @@
 typedef enum {
   StateRun,
   StatePause,
-  StateIdle,
   StateLaunchFig,
   StateTerminate,
   StateFailure,
   StateShiftFig,
   StateInit
-} gamestate_e;
+} gamestate_t;
 
 typedef enum {
   ActStart,
@@ -29,11 +28,11 @@ typedef enum {
   ActTick,
   ActFillInfoField,
   ActMapFallingFigure
-} gameact_e;
+} gameact_t;
 
 typedef struct {
   GameInfo_t info;
-  gamestate_e state;
+  gamestate_t state;
   field_t field;
   struct timeval nexttm;
 } game_t;
