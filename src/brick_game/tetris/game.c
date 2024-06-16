@@ -1,8 +1,10 @@
 #include "brick_game/tetris/game.h"
 
 #include <stdlib.h>
+#include <time.h>
 
 #include "brick_game/tetris/defs.h"
+#include "brick_game/tetris/figset.h"
 
 void game_init(game_t *game) {
   game->info.field = calloc(HEIGHT, sizeof(*game->info.field));
@@ -16,7 +18,10 @@ void game_init(game_t *game) {
   game->info.level = 0;
   game->info.score = 0;
   game->info.speed = 0;
-  game->state = StateRun;
+
+  bitmatrix_create(&game->field.bm, HEIGHT, WIDTH);
+  srand(time(NULL));
+  gettimeofday(&game->nexttm, NULL);
 }
 
 void game_delete(game_t *game) {
@@ -26,4 +31,8 @@ void game_delete(game_t *game) {
   free(*game->info.next);
   free(game->info.next);
   game->info.field = NULL;
+
+  bitmatrix_remove(&game->field.bm);
+  field_removefig(&game->field);
+  figset_free();
 }

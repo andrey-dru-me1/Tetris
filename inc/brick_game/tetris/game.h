@@ -6,7 +6,31 @@
 #include "brick_game/tetris/field.h"
 #include "brick_game/tetris/tetris.h"
 
-typedef enum { StateRun, StatePause } gamestate_e;
+typedef enum {
+  StateRun,
+  StatePause,
+  StateIdle,
+  StateLaunchFig,
+  StateTerminate,
+  StateFailure,
+  StateShiftFig,
+  StateInit
+} gamestate_e;
+
+typedef enum {
+  ActStart,
+  ActPause,
+  ActTerminate,
+  ActLeft,
+  ActRight,
+  ActUp,
+  ActDown,
+  ActAction,
+  ActTick,
+  ActFillInfoField,
+  ActMapFallingFigure
+} gameact_e;
+
 typedef struct {
   GameInfo_t info;
   gamestate_e state;

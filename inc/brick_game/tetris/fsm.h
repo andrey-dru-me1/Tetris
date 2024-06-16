@@ -4,6 +4,6 @@
 #include "brick_game/tetris/game.h"
 #include "brick_game/tetris/tetris.h"
 
-void committransition(game_t *game, UserAction_t act);
+void committransition(game_t *game, gameact_e act);
 
 #endif
