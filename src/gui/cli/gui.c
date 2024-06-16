@@ -88,6 +88,9 @@ static int handle_user_input() {
       case ' ':
         userInput(Action, false);
         break;
+      case 'e':
+        userInput(Pause, false);
+        break;
     }
   }
   return game;
