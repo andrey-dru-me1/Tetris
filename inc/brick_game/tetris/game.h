@@ -3,8 +3,8 @@
 
 #include <sys/time.h>
 
-#include "brick_game/tetris/tetris.h"
 #include "brick_game/tetris/field.h"
+#include "brick_game/tetris/tetris.h"
 
 typedef enum { StateRun, StatePause } gamestate_e;
 typedef struct {
@@ -13,5 +13,8 @@ typedef struct {
   field_t field;
   struct timeval nexttm;
 } game_t;
+
+void game_init(game_t *game);
+void game_delete(game_t *game);
 
 #endif
