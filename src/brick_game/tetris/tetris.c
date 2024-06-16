@@ -108,11 +108,13 @@ static void togglepause() {
 
 static void initgame() {
   game.info.field = calloc(HEIGHT, sizeof(*game.info.field));
+  int *field = calloc(WIDTH * HEIGHT, sizeof(*field));
   for (size_t row = 0; row < HEIGHT; row++)
-    game.info.field[row] = calloc(WIDTH, sizeof(**game.info.field));
+    game.info.field[row] = field + row * WIDTH;
   game.info.next = calloc(4, sizeof(*game.info.next));
+  int *next = calloc(4 * 4, sizeof(*next));
   for (size_t i = 0; i < 4; i++)
-    game.info.next[i] = calloc(4, sizeof(**game.info.next));
+    game.info.next[i] = next + i * 4;
   game.info.high_score = 0;
   game.info.level = 0;
   game.info.score = 0;
@@ -125,13 +127,12 @@ static void initgame() {
 }
 
 static void endgame() {
-  for (size_t row = 0; row < HEIGHT; row++)
-    free(game.info.field[row]);
+  free(*game.info.field);
   free(game.info.field);
   game.info.field = NULL;
-  for (size_t i = 0; i < 4; i++)
-    free(game.info.next[i]);
+  free(*game.info.next);
   free(game.info.next);
+  game.info.field = NULL;
 
   bitmatrix_remove(&game.field.bm);
   field_removefig(&game.field);
