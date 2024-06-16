@@ -1,3 +1,6 @@
+#ifndef TETRIS_H_98561
+#define TETRIS_H_98561
+
 #include <stdbool.h>
 
 typedef enum {
@@ -24,3 +27,5 @@ typedef struct {
 void userInput(UserAction_t action, bool hold);
 
 GameInfo_t updateCurrentState();
+
+#endif

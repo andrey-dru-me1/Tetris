@@ -15,5 +15,6 @@ bool field_shiftfig(field_t *f);
 bool field_movefig(field_t *f, int row, int col);
 void field_commitfig(field_t *f);
 void field_removefig(field_t *f);
+int field_droplines(field_t *f);
 
 #endif
