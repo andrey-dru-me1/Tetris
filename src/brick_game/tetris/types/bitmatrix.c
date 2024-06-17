@@ -11,11 +11,11 @@ bit_t bitmatrix_get(bitmatrix_t *bitmatrix, size_t row, size_t col) {
 }
 
 void bitmatrix_set(bitmatrix_t *bitmatrix, size_t row, size_t col) {
-  bitarray_set(&bitmatrix->ba, row * bitmatrix->cols + col);
+  bitarray_set_bit(&bitmatrix->ba, row * bitmatrix->cols + col, 1);
 }
 
 void bitmatrix_reset(bitmatrix_t *bitmatrix, size_t row, size_t col) {
-  bitarray_reset(&bitmatrix->ba, row * bitmatrix->cols + col);
+  bitarray_set_bit(&bitmatrix->ba, row * bitmatrix->cols + col, 0);
 }
 
 void bitmatrix_set_bit(bitmatrix_t *bitmatrix, size_t row, size_t col,

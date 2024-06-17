@@ -11,14 +11,6 @@ bit_t bitarray_get(bitarray_t *bitarray, size_t i) {
   return bitarray->bits[i];
 }
 
-void bitarray_set(bitarray_t *bitarray, size_t i) {
-  bitarray->bits[i] = 1;
-}
-
-void bitarray_reset(bitarray_t *bitarray, size_t i) {
-  bitarray->bits[i] = 0;
-}
-
 void bitarray_set_bit(bitarray_t *bitarray, size_t i, bit_t val) {
   bitarray->bits[i] = val;
 }
