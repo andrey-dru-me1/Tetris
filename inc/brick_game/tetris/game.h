@@ -35,6 +35,7 @@ typedef struct {
   gamestate_t state;
   field_t field;
   figset_t figset;
+  figure_t *nextfig;
   struct timeval nexttm;
 } game_t;
 

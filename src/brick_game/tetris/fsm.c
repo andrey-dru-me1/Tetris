@@ -25,10 +25,11 @@ static gamestate_t restartgame(game_t *game) {
 
 static gamestate_t launchfig(game_t *game) {
   gamestate_t retstate = StateRun;
-  if (!field_spawnfig(&game->field, game->figset.figs + (rand() % 7), 0, 3,
+  if (!field_spawnfig(&game->field, game->nextfig, 0, 3,
                       0)) {
     retstate = StateFailure;
   }
+  game->nextfig = game->figset.figs + (rand() % 7);
   return retstate;
 }
 

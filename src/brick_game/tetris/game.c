@@ -22,6 +22,8 @@ void game_init(game_t *game) {
   figset_init(&game->figset);
   blockmatrix_create(&game->field.bm, HEIGHT, WIDTH);
   srand(time(NULL));
+
+  game->nextfig = game->figset.figs + rand() % 7;
   gettimeofday(&game->nexttm, NULL);
 }
 
