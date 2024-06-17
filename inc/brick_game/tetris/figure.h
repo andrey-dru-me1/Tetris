@@ -13,7 +13,7 @@ typedef struct {
   size_t rotcnt;
 } figure_t;
 
-void figure_create(figure_t *figure, size_t rotcnt);
+void figure_create(figure_t *figure, size_t rows, size_t cols, size_t rotcnt);
 blockmatrix_t figure_get(figure_t *figure, size_t i);
 void figure_set(figure_t *figure, size_t i, blockmatrix_t val);
 void figure_remove(figure_t *figure);

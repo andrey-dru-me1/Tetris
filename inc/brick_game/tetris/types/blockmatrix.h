@@ -16,7 +16,8 @@ block_t blockmatrix_get(blockmatrix_t *blockmatrix, size_t row, size_t col);
 void blockmatrix_set(blockmatrix_t *blockmatrix, size_t row, size_t col,
                        block_t val);
 void blockmatrix_remove(blockmatrix_t *blockmatrix);
-blockmatrix_t blockmatrix_rotate(blockmatrix_t *blockmatrix);
-blockmatrix_t blockmatrix_flip_vertically(blockmatrix_t *blockmatrix);
+void blockmatrix_rotate(blockmatrix_t *src, blockmatrix_t *dst);
+void blockmatrix_flip_vertically(blockmatrix_t *src, blockmatrix_t *dst);
+void blockmatrix_copy(blockmatrix_t *src, blockmatrix_t *dst);
 
 #endif

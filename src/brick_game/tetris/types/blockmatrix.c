@@ -1,6 +1,7 @@
 #include "brick_game/tetris/types/blockmatrix.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 void blockmatrix_create(blockmatrix_t *blockmatrix, size_t rows, size_t cols) {
   blockmatrix->blocks = calloc(rows * cols, sizeof(*blockmatrix->blocks));
@@ -13,7 +14,7 @@ block_t blockmatrix_get(blockmatrix_t *blockmatrix, size_t row, size_t col) {
 }
 
 void blockmatrix_set(blockmatrix_t *blockmatrix, size_t row, size_t col,
-                       block_t val) {
+                     block_t val) {
   blockmatrix->blocks[row * blockmatrix->cols + col] = val;
 }
 
@@ -21,26 +22,33 @@ void blockmatrix_remove(blockmatrix_t *blockmatrix) {
   free(blockmatrix->blocks);
 }
 
-blockmatrix_t blockmatrix_rotate(blockmatrix_t *blockmatrix) {
-  blockmatrix_t newmtx;
-  blockmatrix_create(&newmtx, blockmatrix->cols, blockmatrix->rows);
-  for (int i = 0; i < blockmatrix->rows; i++) {
-    for (int j = 0; j < blockmatrix->cols; j++) {
-      blockmatrix_set(&newmtx, j, newmtx.cols - 1 - i,
-                        blockmatrix_get(blockmatrix, i, j));
+void blockmatrix_rotate(blockmatrix_t *src, blockmatrix_t *dst) {
+  blockmatrix_t new;
+  blockmatrix_create(&new, src->cols, src->rows);
+  for (int i = 0; i < src->rows; i++) {
+    for (int j = 0; j < src->cols; j++) {
+      blockmatrix_set(&new, j, src->rows - 1 - i, blockmatrix_get(src, i, j));
     }
   }
-  return newmtx;
+  blockmatrix_copy(&new, dst);
+  blockmatrix_remove(&new);
 }
 
-blockmatrix_t blockmatrix_flip_vertically(blockmatrix_t *blockmatrix) {
-  blockmatrix_t newmtx;
-  blockmatrix_create(&newmtx, blockmatrix->rows, blockmatrix->cols);
-  for (int i = 0; i < blockmatrix->rows; i++) {
-    for (int j = 0; j < blockmatrix->cols; j++) {
-      blockmatrix_set(&newmtx, i, newmtx.cols - 1 - j,
-                        blockmatrix_get(blockmatrix, i, j));
+void blockmatrix_flip_vertically(blockmatrix_t *src, blockmatrix_t *dst) {
+  blockmatrix_t new;
+  blockmatrix_create(&new, src->rows, src->cols);
+  for (int i = 0; i < src->rows; i++) {
+    for (int j = 0; j < src->cols; j++) {
+      blockmatrix_set(&new, i, src->cols - 1 - j, blockmatrix_get(src, i, j));
     }
   }
-  return newmtx;
+  blockmatrix_copy(&new, dst);
+  blockmatrix_remove(&new);
+}
+
+void blockmatrix_copy(blockmatrix_t *src, blockmatrix_t *dst) {
+  dst->rows = src->rows;
+  dst->cols = src->cols;
+  memmove(dst->blocks, src->blocks,
+          src->rows * src->cols * sizeof(*src->blocks));
 }
