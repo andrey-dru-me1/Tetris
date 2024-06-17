@@ -8,6 +8,8 @@
 #include "brick_game/tetris/field.h"
 #include "brick_game/tetris/figset.h"
 
+#define MIN(A, B) (A) > (B) ? (B) : (A)
+
 typedef gamestate_t (*transition_fn)(game_t *);
 
 static void _droplines(game_t *game) { field_droplines(&game->field); }
@@ -37,11 +39,15 @@ static gamestate_t restartgame(game_t *game) {
 }
 
 static gamestate_t launchfig(game_t *game) {
+  static long tickintervals[] = {1e6, 9e5, 8e5, 7e5, 6e5,
+                                 5e5, 4e5, 3e5, 2e5, 1e5};
+
   gamestate_t retstate = StateRun;
   if (!field_spawnfig(&game->field, game->nextfig, 0, 3, 0)) {
     retstate = StateFailure;
   }
   game->nextfig = game->figset.figs + (rand() % 7);
+  game->usectickinterval = tickintervals[MIN(9, game->info.score / 600)];
   return retstate;
 }
 
@@ -109,8 +115,8 @@ static gamestate_t tick(game_t *game) {
     retstate = shiftfig(game);
     game->nexttm = (struct timeval){
         .tv_sec = game->nexttm.tv_sec +
-                  ((game->nexttm.tv_usec + SHIFT_INTERVAL) / (long)1e6),
-        .tv_usec = (game->nexttm.tv_usec + SHIFT_INTERVAL) % (long)1e6};
+                  ((game->nexttm.tv_usec + game->usectickinterval) / (long)1e6),
+        .tv_usec = (game->nexttm.tv_usec + game->usectickinterval) % (long)1e6};
   }
   return retstate;
 }

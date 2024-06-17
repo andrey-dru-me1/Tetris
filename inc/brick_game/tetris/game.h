@@ -37,6 +37,7 @@ typedef struct {
   figset_t figset;
   figure_t *nextfig;
   struct timeval nexttm;
+  long usectickinterval;
 } game_t;
 
 void game_init(game_t *game);

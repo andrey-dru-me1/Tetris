@@ -97,7 +97,16 @@ static void print_next(GameInfo_t gameinfo) {
 
 static void print_score(GameInfo_t gameinfo) {
   move(7, WIDTH * 2 + 3);
-  printw("Score: %-5d", gameinfo.score);
+  addstr("Score:");
+  move(8, WIDTH * 2 + 3);
+  printw("%10d", gameinfo.score);
+}
+
+static void print_level(GameInfo_t gameinfo) {
+  move(9, WIDTH * 2 + 3);
+  addstr("Level:");
+  move(10, WIDTH * 2 + 3);
+  printw("%10d", gameinfo.score / 600);
 }
 
 static int handle_user_input() {
@@ -146,6 +155,7 @@ int main(void) {
     print_field(gameinfo);
     print_next(gameinfo);
     print_score(gameinfo);
+    print_level(gameinfo);
     if (gameinfo.pause) print_pause();
     refresh();
     usleep(10000);  // 1/100 sec

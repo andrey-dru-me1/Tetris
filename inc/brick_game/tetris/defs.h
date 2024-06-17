@@ -4,6 +4,4 @@
 #define WIDTH 10
 #define HEIGHT 20
 
-#define SHIFT_INTERVAL 500000
-
 #endif
