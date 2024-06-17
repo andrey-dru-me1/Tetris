@@ -39,15 +39,21 @@ static void print_border() {
   move(0, 0);
   addch(ACS_ULCORNER);
   for (int i = 0; i < WIDTH * 2; i++) addch(ACS_HLINE);
+  addch(ACS_TTEE);
+  for (int i = 0; i < 12; i++) addch(ACS_HLINE);
   addch(ACS_URCORNER);
+
   move(HEIGHT + 1, 0);
   addch(ACS_LLCORNER);
   for (int i = 0; i < WIDTH * 2; i++) addch(ACS_HLINE);
+  addch(ACS_BTEE);
+  for (int i = 0; i < 12; i++) addch(ACS_HLINE);
   addch(ACS_LRCORNER);
 
   for (int i = 1; i < HEIGHT + 1; i++) {
     mvaddch(i, 0, ACS_VLINE);
     mvaddch(i, WIDTH * 2 + 1, ACS_VLINE);
+    mvaddch(i, WIDTH * 2 + 14, ACS_VLINE);
   }
 }
 
