@@ -106,50 +106,22 @@ static figure_t figgen_generate_Z_figure() {
   return figZ;
 }
 
-typedef enum {Get=0, Free} figset_act_e;
+void figset_init(figset_t *figset) {
+  typedef figure_t (*figgen_t)();
 
-typedef figure_t *(*figset_fn)(figure_t *, bool *);
-
-static figure_t *_figset_get(figure_t *_figset, bool *initialized) {
-  if (!*initialized) {
-    typedef figure_t (*figgen_t)();
-
-    figgen_t figgens[] = {
-        figgen_generate_I_figure, figgen_generate_L_figure,
-        figgen_generate_J_figure, figgen_generate_O_figure,
-        figgen_generate_T_figure, figgen_generate_S_figure,
-        figgen_generate_Z_figure,
-    };
-    for (int i = 0; i < 7; i++) {
-      _figset[i] = figgens[i]();
-    }
-    *initialized = true;
-  }
-
-  return _figset;
-}
-
-static figure_t *_figset_free(figure_t *_figset, bool *initialized) {
+  figgen_t figgens[] = {
+      figgen_generate_I_figure, figgen_generate_L_figure,
+      figgen_generate_J_figure, figgen_generate_O_figure,
+      figgen_generate_T_figure, figgen_generate_S_figure,
+      figgen_generate_Z_figure,
+  };
   for (int i = 0; i < 7; i++) {
-    figure_remove(_figset + i);
+    figset->figs[i] = figgens[i]();
   }
-  *initialized = false;
-
-  return _figset;
 }
 
-static figure_t *_figset_act(figset_act_e act) {
-  static figure_t _figset[7];
-  static bool initialized = false;
-  static figset_fn acts[] = {_figset_get, _figset_free};
-
-  return acts[act](_figset, &initialized);
-}
-
-figure_t *figset() {
-  return _figset_act(Get);
-}
-
-void figset_free() {
-  _figset_act(Free);
+void figset_free(figset_t *figset) {
+  for (int i = 0; i < 7; i++) {
+    figure_remove(figset->figs + i);
+  }
 }

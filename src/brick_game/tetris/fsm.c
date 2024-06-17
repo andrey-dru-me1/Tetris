@@ -25,7 +25,8 @@ static gamestate_t restartgame(game_t *game) {
 
 static gamestate_t launchfig(game_t *game) {
   gamestate_t retstate = StateRun;
-  if (!field_spawnfig(&game->field, figset() + (rand() % 7), 0, 3, 0)) {
+  if (!field_spawnfig(&game->field, game->figset.figs + (rand() % 7), 0, 3,
+                      0)) {
     retstate = StateFailure;
   }
   return retstate;
@@ -154,7 +155,7 @@ void committransition(game_t *game, gameact_t act) {
       {pass, pass, pass, pass, pass, pass, pass, pass, pass, fillinfofield,
        pass},
       {tryagain, pass, endgame, pass, pass, pass, pass, pass, pass,
-       fillinfofield, mapfallingfigure},
+       fillinfofield, pass},
       {shiftfig, shiftfig, shiftfig, shiftfig, shiftfig, shiftfig, shiftfig,
        shiftfig, shiftfig, fillinfofield, mapfallingfigure},
       {initgame, initgame, initgame, initgame, initgame, initgame, initgame,

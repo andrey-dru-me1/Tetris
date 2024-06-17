@@ -3,7 +3,11 @@
 
 #include "brick_game/tetris/figure.h"
 
-figure_t *figset();
-void figset_free();
+typedef struct {
+    figure_t figs[7];
+} figset_t;
+
+void figset_init(figset_t *figset);
+void figset_free(figset_t *figset);
 
 #endif

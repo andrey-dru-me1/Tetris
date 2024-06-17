@@ -19,6 +19,7 @@ void game_init(game_t *game) {
   game->info.score = 0;
   game->info.speed = 0;
 
+  figset_init(&game->figset);
   bitmatrix_create(&game->field.bm, HEIGHT, WIDTH);
   srand(time(NULL));
   gettimeofday(&game->nexttm, NULL);
@@ -34,5 +35,5 @@ void game_delete(game_t *game) {
 
   bitmatrix_remove(&game->field.bm);
   field_removefig(&game->field);
-  figset_free();
+  figset_free(&game->figset);
 }

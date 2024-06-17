@@ -5,6 +5,7 @@
 
 #include "brick_game/tetris/field.h"
 #include "brick_game/tetris/tetris.h"
+#include "brick_game/tetris/figset.h"
 
 typedef enum {
   StateRun,
@@ -34,6 +35,7 @@ typedef struct {
   GameInfo_t info;
   gamestate_t state;
   field_t field;
+  figset_t figset;
   struct timeval nexttm;
 } game_t;
 
