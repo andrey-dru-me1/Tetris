@@ -59,7 +59,7 @@ void field_commitfig(field_t *f) {
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (bitmatrix_get(&bm, i, j))
-        bitmatrix_set(&f->bm, f->ff.row + i, f->ff.col + j);
+        bitmatrix_set_bit(&f->bm, f->ff.row + i, f->ff.col + j, 1);
     }
   }
 }

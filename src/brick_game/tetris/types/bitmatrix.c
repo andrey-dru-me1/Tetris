@@ -10,14 +10,6 @@ bit_t bitmatrix_get(bitmatrix_t *bitmatrix, size_t row, size_t col) {
   return bitarray_get(&bitmatrix->ba, row * bitmatrix->cols + col);
 }
 
-void bitmatrix_set(bitmatrix_t *bitmatrix, size_t row, size_t col) {
-  bitarray_set_bit(&bitmatrix->ba, row * bitmatrix->cols + col, 1);
-}
-
-void bitmatrix_reset(bitmatrix_t *bitmatrix, size_t row, size_t col) {
-  bitarray_set_bit(&bitmatrix->ba, row * bitmatrix->cols + col, 0);
-}
-
 void bitmatrix_set_bit(bitmatrix_t *bitmatrix, size_t row, size_t col,
                        bit_t val) {
   bitarray_set_bit(&bitmatrix->ba, row * bitmatrix->cols + col, val);
