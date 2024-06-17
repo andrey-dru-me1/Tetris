@@ -99,7 +99,7 @@ static gamestate_t tick(game_t *game) {
   gettimeofday(&now, NULL);
   if (now.tv_sec > game->nexttm.tv_sec && now.tv_usec > game->nexttm.tv_usec &&
       game->state == StateRun) {
-    retstate = StateShiftFig;
+    retstate = shiftfig(game);
     game->nexttm = (struct timeval){
         .tv_sec = game->nexttm.tv_sec +
                   ((game->nexttm.tv_usec + SHIFT_INTERVAL) / (long)1e6),
@@ -156,8 +156,6 @@ void committransition(game_t *game, gameact_t act) {
        pass},
       {tryagain, pass, endgame, pass, pass, pass, pass, pass, pass,
        fillinfofield, pass},
-      {shiftfig, shiftfig, shiftfig, shiftfig, shiftfig, shiftfig, shiftfig,
-       shiftfig, shiftfig, fillinfofield, mapfallingfigure},
       {initgame, initgame, initgame, initgame, initgame, initgame, initgame,
        initgame, initgame, initgame, initgame}};
 

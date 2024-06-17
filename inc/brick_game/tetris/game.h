@@ -13,7 +13,6 @@ typedef enum {
   StateLaunchFig,
   StateTerminate,
   StateFailure,
-  StateShiftFig,
   StateInit
 } gamestate_t;
 
