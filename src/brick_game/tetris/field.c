@@ -59,7 +59,7 @@ void field_commitfig(field_t *f) {
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (bitmatrix_get(&bm, i, j))
-        bitmatrix_set_bit(&f->bm, f->ff.row + i, f->ff.col + j, 1);
+        bitmatrix_set(&f->bm, f->ff.row + i, f->ff.col + j, 1);
     }
   }
 }
@@ -71,7 +71,7 @@ void field_removefig(field_t *f) {
 static void _field_dropline(field_t *f, size_t droprow) {
   for (size_t row = droprow; row > 0; row--) {
     for (size_t col = 0; col < f->bm.cols; col++) {
-      bitmatrix_set_bit(&f->bm, row, col, bitmatrix_get(&f->bm, row - 1, col));
+      bitmatrix_set(&f->bm, row, col, bitmatrix_get(&f->bm, row - 1, col));
     }
   }
 }
