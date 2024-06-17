@@ -1,22 +1,24 @@
 #include "brick_game/tetris/types/blockmatrix.h"
 
+#include <stdlib.h>
+
 void blockmatrix_create(blockmatrix_t *blockmatrix, size_t rows, size_t cols) {
-  blockarray_create(&blockmatrix->ba, rows * cols);
+  blockmatrix->blocks = calloc(rows * cols, sizeof(*blockmatrix->blocks));
   blockmatrix->rows = rows;
   blockmatrix->cols = cols;
 }
 
 block_t blockmatrix_get(blockmatrix_t *blockmatrix, size_t row, size_t col) {
-  return blockarray_get(&blockmatrix->ba, row * blockmatrix->cols + col);
+  return blockmatrix->blocks[row * blockmatrix->cols + col];
 }
 
 void blockmatrix_set(blockmatrix_t *blockmatrix, size_t row, size_t col,
                        block_t val) {
-  blockarray_set(&blockmatrix->ba, row * blockmatrix->cols + col, val);
+  blockmatrix->blocks[row * blockmatrix->cols + col] = val;
 }
 
 void blockmatrix_remove(blockmatrix_t *blockmatrix) {
-  blockarray_remove(&blockmatrix->ba);
+  free(blockmatrix->blocks);
 }
 
 blockmatrix_t blockmatrix_rotate(blockmatrix_t *blockmatrix) {

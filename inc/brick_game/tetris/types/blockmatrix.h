@@ -1,10 +1,12 @@
 #ifndef BITMATRIX_H_78651
 #define BITMATRIX_H_78651
 
-#include "brick_game/tetris/types/blockarray.h"
+#include "brick_game/tetris/types/block.h"
+
+#include <stddef.h>
 
 typedef struct {
-  blockarray_t ba;
+  block_t *blocks;
   size_t rows;
   size_t cols;
 } blockmatrix_t;
