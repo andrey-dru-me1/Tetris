@@ -100,7 +100,7 @@ static gamestate_t tick(game_t *game) {
   gamestate_t retstate = game->state;
   struct timeval now;
   gettimeofday(&now, NULL);
-  if (now.tv_sec > game->nexttm.tv_sec && now.tv_usec > game->nexttm.tv_usec &&
+  if (now.tv_sec >= game->nexttm.tv_sec && now.tv_usec >= game->nexttm.tv_usec &&
       game->state == StateRun) {
     retstate = shiftfig(game);
     game->nexttm = (struct timeval){
