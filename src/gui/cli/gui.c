@@ -74,7 +74,7 @@ static void print_field(GameInfo_t gameinfo) {
 
 static void print_pause() {
   HIGHLIGHT_TEXT;
-  mvaddstr(HEIGHT / 2, WIDTH / 2 + 3, "Paused");
+  mvaddstr(HEIGHT / 2, WIDTH - 3, "Paused");
   RESET_COLOR;
 }
 
@@ -93,6 +93,11 @@ static void print_next(GameInfo_t gameinfo) {
       RESET_COLOR;
     }
   }
+}
+
+static void print_score(GameInfo_t gameinfo) {
+  move(7, WIDTH * 2 + 3);
+  printw("Score: %-5d", gameinfo.score);
 }
 
 static int handle_user_input() {
@@ -140,6 +145,7 @@ int main(void) {
     GameInfo_t gameinfo = updateCurrentState();
     print_field(gameinfo);
     print_next(gameinfo);
+    print_score(gameinfo);
     if (gameinfo.pause) print_pause();
     refresh();
     usleep(10000);  // 1/100 sec

@@ -15,6 +15,18 @@ static void _droplines(game_t *game) { field_droplines(&game->field); }
 static bool _checkconstraints(int row, int col, int width, int height) {
   return row >= 0 && row < width && col >= 0 && col < height;
 }
+static bool _shiftfig(game_t *game) {
+  static int scoring[] = {0, 100, 300, 700, 1500};
+
+  bool validshift = field_shiftfig(&game->field);
+  if (!validshift) {
+    field_commitfig(&game->field);
+    field_removefig(&game->field);
+    int linesdropped = field_droplines(&game->field);
+    game->info.score += scoring[linesdropped];
+  }
+  return validshift;
+}
 
 static gamestate_t pass(game_t *game) { return game->state; }
 
@@ -34,24 +46,15 @@ static gamestate_t launchfig(game_t *game) {
 }
 
 static gamestate_t shiftfig(game_t *game) {
-  static int scoring[] = {0, 100, 300, 700, 1500};
-
   gamestate_t retstate = StateRun;
-  if (!field_shiftfig(&game->field)) {
-    field_commitfig(&game->field);
-    field_removefig(&game->field);
-    int linesdropped = field_droplines(&game->field);
-    game->info.score += scoring[linesdropped];
+  if (!_shiftfig(game)) {
     retstate = StateLaunchFig;
   }
   return retstate;
 }
 
 static gamestate_t movefigdown(game_t *game) {
-  while (field_shiftfig(&game->field));
-  field_commitfig(&game->field);
-  field_removefig(&game->field);
-  field_droplines(&game->field);
+  while (_shiftfig(game));
   return StateLaunchFig;
 }
 
