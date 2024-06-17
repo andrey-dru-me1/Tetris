@@ -7,9 +7,8 @@
 #define WIDTH 10
 #define HEIGHT 20
 
-#define SET_SQUARE bkgdset(COLOR_PAIR(1))
-#define SET_SPACE bkgdset(COLOR_PAIR(2))
-#define SET_BORDER bkgdset(COLOR_PAIR(3))
+#define SET_SPACE bkgdset(COLOR_PAIR(8))
+#define SET_BORDER bkgdset(COLOR_PAIR(9))
 #define RESET_COLOR bkgdset(COLOR_PAIR(0))
 
 static void init_curses() {
@@ -24,39 +23,48 @@ static void init_curses() {
   start_color();
 
   init_pair(1, COLOR_WHITE, COLOR_WHITE);
-  init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(2, COLOR_WHITE, COLOR_RED);
   init_pair(3, COLOR_WHITE, COLOR_GREEN);
+  init_pair(4, COLOR_WHITE, COLOR_YELLOW);
+  init_pair(5, COLOR_WHITE, COLOR_BLUE);
+  init_pair(6, COLOR_WHITE, COLOR_MAGENTA);
+  init_pair(7, COLOR_WHITE, COLOR_CYAN);
+  init_pair(8, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(9, COLOR_WHITE, COLOR_GREEN);
 }
 
 static void print_border() {
-  SET_BORDER;
   move(0, 0);
-  for (int i = 0; i < WIDTH + 2; i++) addstr("  ");
+  addch(ACS_ULCORNER);
+  for (int i = 0; i < WIDTH * 2; i++) addch(ACS_HLINE);
+  addch(ACS_URCORNER);
   move(HEIGHT + 1, 0);
-  for (int i = 0; i < WIDTH + 2; i++) addstr("  ");
+  addch(ACS_LLCORNER);
+  for (int i = 0; i < WIDTH * 2; i++) addch(ACS_HLINE);
+  addch(ACS_LRCORNER);
 
-  for (int i = 0; i < HEIGHT + 1; i++) {
-    mvaddstr(i + 1, 0, "  ");
-    mvaddstr(i + 1, WIDTH * 2 + 2, "  ");
+  for (int i = 1; i < HEIGHT + 1; i++) {
+    mvaddch(i, 0, ACS_VLINE);
+    mvaddch(i, WIDTH * 2 + 1, ACS_VLINE);
   }
 }
 
 static void print_field(GameInfo_t game_info) {
   for (int i = 0; i < HEIGHT; i++) {
-    move(i + 1, 2);
+    move(i + 1, 1);
     for (int j = 0; j < WIDTH; j++) {
-      bool square = false;
-      if (game_info.field[i][j] & 1u) {
-        SET_SQUARE;
-        square = true;
+      if (game_info.field[i][j] > 0) {
+        bkgdset(COLOR_PAIR(game_info.field[i][j]));
+        addch('[');
+        addch(']');
+      } else if (game_info.field[i][j] == 0) {
+        SET_SPACE;
+        addstr("  ");
       } else {
         SET_SPACE;
+        addch(ACS_BOARD);
+        addch(ACS_BOARD);
       }
-      if ((game_info.field[i][j] & 0b10u) && !square) {
-        addch(ACS_BOARD);
-        addch(ACS_BOARD);
-      } else
-        addstr("  ");
     }
     RESET_COLOR;
   }

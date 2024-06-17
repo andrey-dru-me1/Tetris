@@ -7,10 +7,10 @@ static bool _field_validatefig(field_t *f) {
   for (int i = 0; !does_overlap && i < bm.rows; i++) {
     for (int j = 0; !does_overlap && j < bm.cols; j++) {
       block_t figblock = blockmatrix_get(&bm, i, j);
-      if (figblock == 1 &&
+      if (figblock != 0 &&
           (f->ff.row + i < 0 || f->ff.row + i >= f->bm.rows ||
            f->ff.col + j < 0 || f->ff.col + j >= f->bm.cols ||
-           blockmatrix_get(&f->bm, f->ff.row + i, f->ff.col + j) == 1))
+           blockmatrix_get(&f->bm, f->ff.row + i, f->ff.col + j) != 0))
         does_overlap = true;
     }
   }
@@ -59,7 +59,8 @@ void field_commitfig(field_t *f) {
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (blockmatrix_get(&bm, i, j))
-        blockmatrix_set(&f->bm, f->ff.row + i, f->ff.col + j, 1);
+        blockmatrix_set(&f->bm, f->ff.row + i, f->ff.col + j,
+                        f->ff.fig->figtype);
     }
   }
 }

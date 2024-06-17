@@ -124,9 +124,10 @@ static gamestate_t mapfallingfigure(game_t *game) {
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (_checkconstraints(game->field.ff.row + i, game->field.ff.col + j,
-                            game->field.bm.rows, game->field.bm.cols))
-        intfield[game->field.ff.row + i][game->field.ff.col + j] |=
-            blockmatrix_get(&bm, i, j);
+                            game->field.bm.rows, game->field.bm.cols) &&
+          blockmatrix_get(&bm, i, j))
+        intfield[game->field.ff.row + i][game->field.ff.col + j] =
+            game->field.ff.fig->figtype;
     }
   }
 
@@ -135,9 +136,10 @@ static gamestate_t mapfallingfigure(game_t *game) {
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (_checkconstraints(game->field.ff.row + i, game->field.ff.col + j,
-                            game->field.bm.rows, game->field.bm.cols))
-        intfield[game->field.ff.row + i][game->field.ff.col + j] |=
-            blockmatrix_get(&bm, i, j) * 2;
+                            game->field.bm.rows, game->field.bm.cols) &&
+          intfield[game->field.ff.row + i][game->field.ff.col + j] == 0 &&
+          blockmatrix_get(&bm, i, j) != 0)
+        intfield[game->field.ff.row + i][game->field.ff.col + j] = -1;
     }
   }
   game->field.ff.row = prevrow;
