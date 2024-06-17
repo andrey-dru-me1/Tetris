@@ -9,6 +9,7 @@
 
 #define SET_SPACE bkgdset(COLOR_PAIR(8))
 #define SET_BORDER bkgdset(COLOR_PAIR(9))
+#define HIGHLIGHT_TEXT bkgdset(COLOR_PAIR(10))
 #define RESET_COLOR bkgdset(COLOR_PAIR(0))
 
 static void init_curses() {
@@ -31,6 +32,7 @@ static void init_curses() {
   init_pair(7, COLOR_WHITE, COLOR_CYAN);
   init_pair(8, COLOR_YELLOW, COLOR_BLACK);
   init_pair(9, COLOR_WHITE, COLOR_GREEN);
+  init_pair(10, COLOR_BLACK, COLOR_WHITE);
 }
 
 static void print_border() {
@@ -68,7 +70,12 @@ static void print_field(GameInfo_t game_info) {
     }
     RESET_COLOR;
   }
-  refresh();
+}
+
+static void print_pause() {
+  HIGHLIGHT_TEXT;
+  mvaddstr(HEIGHT / 2, WIDTH / 2 + 3, "Paused");
+  RESET_COLOR;
 }
 
 static int handle_user_input() {
@@ -115,6 +122,8 @@ int main(void) {
   while (game) {
     GameInfo_t game_info = updateCurrentState();
     print_field(game_info);
+    if (game_info.pause) print_pause();
+    refresh();
     usleep(10000);  // 1/100 sec
     game = handle_user_input();
   }
