@@ -151,7 +151,7 @@ void committransition(game_t *game, gameact_t act) {
       {restartgame, resetpause, endgame, pass, pass, pass, pass, pass, pass,
        fillinfofield, mapfallingfigure},
       {launchfig, launchfig, launchfig, launchfig, launchfig, launchfig,
-       launchfig, launchfig, launchfig, fillinfofield, mapfallingfigure},
+       launchfig, launchfig, launchfig, fillinfofield, launchfig},
       {pass, pass, pass, pass, pass, pass, pass, pass, pass, fillinfofield,
        pass},
       {tryagain, pass, endgame, pass, pass, pass, pass, pass, pass,

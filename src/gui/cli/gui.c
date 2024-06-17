@@ -104,7 +104,6 @@ int main(void) {
   print_border();
 
   int game = 1;
-  userInput(Start, false);
   while (game) {
     GameInfo_t game_info = updateCurrentState();
     print_field(game_info);
