@@ -2,10 +2,10 @@
 #define FIELD_H_68165
 
 #include "brick_game/tetris/falling_figure.h"
-#include "brick_game/tetris/types/bitmatrix.h"
+#include "brick_game/tetris/types/blockmatrix.h"
 
 typedef struct {
-  bitmatrix_t bm;
+  blockmatrix_t bm;
   falling_figure_t ff;
 } field_t;
 

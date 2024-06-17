@@ -3,14 +3,14 @@
 static bool _field_validatefig(field_t *f) {
   bool does_overlap = false;
 
-  bitmatrix_t bm = figure_get(f->ff.fig, f->ff.rotidx);
+  blockmatrix_t bm = figure_get(f->ff.fig, f->ff.rotidx);
   for (int i = 0; !does_overlap && i < bm.rows; i++) {
     for (int j = 0; !does_overlap && j < bm.cols; j++) {
-      bit_t figbit = bitmatrix_get(&bm, i, j);
-      if (figbit == 1 &&
+      block_t figblock = blockmatrix_get(&bm, i, j);
+      if (figblock == 1 &&
           (f->ff.row + i < 0 || f->ff.row + i >= f->bm.rows ||
            f->ff.col + j < 0 || f->ff.col + j >= f->bm.cols ||
-           bitmatrix_get(&f->bm, f->ff.row + i, f->ff.col + j) == 1))
+           blockmatrix_get(&f->bm, f->ff.row + i, f->ff.col + j) == 1))
         does_overlap = true;
     }
   }
@@ -55,11 +55,11 @@ bool field_shiftfig(field_t *f) {
 }
 
 void field_commitfig(field_t *f) {
-  bitmatrix_t bm = figure_get(f->ff.fig, f->ff.rotidx);
+  blockmatrix_t bm = figure_get(f->ff.fig, f->ff.rotidx);
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
-      if (bitmatrix_get(&bm, i, j))
-        bitmatrix_set(&f->bm, f->ff.row + i, f->ff.col + j, 1);
+      if (blockmatrix_get(&bm, i, j))
+        blockmatrix_set(&f->bm, f->ff.row + i, f->ff.col + j, 1);
     }
   }
 }
@@ -71,7 +71,7 @@ void field_removefig(field_t *f) {
 static void _field_dropline(field_t *f, size_t droprow) {
   for (size_t row = droprow; row > 0; row--) {
     for (size_t col = 0; col < f->bm.cols; col++) {
-      bitmatrix_set(&f->bm, row, col, bitmatrix_get(&f->bm, row - 1, col));
+      blockmatrix_set(&f->bm, row, col, blockmatrix_get(&f->bm, row - 1, col));
     }
   }
 }
@@ -81,7 +81,7 @@ int field_droplines(field_t *f) {
   for (size_t row = 0; row < f->bm.rows; row++) {
     bool linefilled = true;
     for (size_t col = 0;
-         col < f->bm.cols && (linefilled = bitmatrix_get(&f->bm, row, col));
+         col < f->bm.cols && (linefilled = blockmatrix_get(&f->bm, row, col));
          col++);
     if (linefilled) {
       _field_dropline(f, row);

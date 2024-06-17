@@ -112,7 +112,7 @@ static gamestate_t fillinfofield(game_t *game) {
   int **intfield = game->info.field;
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
-      intfield[i][j] = bitmatrix_get(&game->field.bm, i, j);
+      intfield[i][j] = blockmatrix_get(&game->field.bm, i, j);
     }
   }
   return game->state;
@@ -120,13 +120,13 @@ static gamestate_t fillinfofield(game_t *game) {
 
 static gamestate_t mapfallingfigure(game_t *game) {
   int **intfield = game->info.field;
-  bitmatrix_t bm = figure_get(game->field.ff.fig, game->field.ff.rotidx);
+  blockmatrix_t bm = figure_get(game->field.ff.fig, game->field.ff.rotidx);
   for (int i = 0; i < bm.rows; i++) {
     for (int j = 0; j < bm.cols; j++) {
       if (_checkconstraints(game->field.ff.row + i, game->field.ff.col + j,
                             game->field.bm.rows, game->field.bm.cols))
         intfield[game->field.ff.row + i][game->field.ff.col + j] |=
-            bitmatrix_get(&bm, i, j);
+            blockmatrix_get(&bm, i, j);
     }
   }
 
@@ -137,7 +137,7 @@ static gamestate_t mapfallingfigure(game_t *game) {
       if (_checkconstraints(game->field.ff.row + i, game->field.ff.col + j,
                             game->field.bm.rows, game->field.bm.cols))
         intfield[game->field.ff.row + i][game->field.ff.col + j] |=
-            bitmatrix_get(&bm, i, j) * 2;
+            blockmatrix_get(&bm, i, j) * 2;
     }
   }
   game->field.ff.row = prevrow;

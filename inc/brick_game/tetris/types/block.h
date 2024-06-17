@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-typedef uint8_t bit_t;
+typedef uint8_t block_t;
 
 #endif
