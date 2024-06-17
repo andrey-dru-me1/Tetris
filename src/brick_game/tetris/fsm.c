@@ -1,6 +1,7 @@
 #include "brick_game/tetris/fsm.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "brick_game/tetris/defs.h"
@@ -25,8 +26,7 @@ static gamestate_t restartgame(game_t *game) {
 
 static gamestate_t launchfig(game_t *game) {
   gamestate_t retstate = StateRun;
-  if (!field_spawnfig(&game->field, game->nextfig, 0, 3,
-                      0)) {
+  if (!field_spawnfig(&game->field, game->nextfig, 0, 3, 0)) {
     retstate = StateFailure;
   }
   game->nextfig = game->figset.figs + (rand() % 7);
@@ -101,8 +101,8 @@ static gamestate_t tick(game_t *game) {
   gamestate_t retstate = game->state;
   struct timeval now;
   gettimeofday(&now, NULL);
-  if (now.tv_sec >= game->nexttm.tv_sec && now.tv_usec >= game->nexttm.tv_usec &&
-      game->state == StateRun) {
+  if (now.tv_sec >= game->nexttm.tv_sec &&
+      now.tv_usec >= game->nexttm.tv_usec && game->state == StateRun) {
     retstate = shiftfig(game);
     game->nexttm = (struct timeval){
         .tv_sec = game->nexttm.tv_sec +
@@ -117,6 +117,15 @@ static gamestate_t fillinfofield(game_t *game) {
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
       intfield[i][j] = blockmatrix_get(&game->field.bm, i, j);
+    }
+  }
+
+  for (int i = 0; i < 4; i++) memset(game->info.next[i], 0, 4 * sizeof(int));
+
+  for (int i = 0; i < game->nextfig->rots[0].rows; i++) {
+    for (int j = 0; j < game->nextfig->rots[0].cols; j++) {
+      game->info.next[i][j] = blockmatrix_get(&game->nextfig->rots[0], i, j) *
+                              game->nextfig->figtype;
     }
   }
   return game->state;

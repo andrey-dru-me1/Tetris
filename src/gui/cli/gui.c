@@ -51,15 +51,15 @@ static void print_border() {
   }
 }
 
-static void print_field(GameInfo_t game_info) {
+static void print_field(GameInfo_t gameinfo) {
   for (int i = 0; i < HEIGHT; i++) {
     move(i + 1, 1);
     for (int j = 0; j < WIDTH; j++) {
-      if (game_info.field[i][j] > 0) {
-        bkgdset(COLOR_PAIR(game_info.field[i][j]));
+      if (gameinfo.field[i][j] > 0) {
+        bkgdset(COLOR_PAIR(gameinfo.field[i][j]));
         addch('[');
         addch(']');
-      } else if (game_info.field[i][j] == 0) {
+      } else if (gameinfo.field[i][j] == 0) {
         SET_SPACE;
         addstr("  ");
       } else {
@@ -76,6 +76,23 @@ static void print_pause() {
   HIGHLIGHT_TEXT;
   mvaddstr(HEIGHT / 2, WIDTH / 2 + 3, "Paused");
   RESET_COLOR;
+}
+
+static void print_next(GameInfo_t gameinfo) {
+  mvaddstr(1, WIDTH * 2 + 4, "Next");
+  for (int i = 0; i < 4; i++) {
+    move(i + 2, WIDTH * 2 + 4);
+    for (int j = 0; j < 4; j++) {
+      if (gameinfo.next[i][j]) {
+        bkgdset(COLOR_PAIR(gameinfo.next[i][j]));
+        addch('[');
+        addch(']');
+      } else {
+        addstr("  ");
+      }
+      RESET_COLOR;
+    }
+  }
 }
 
 static int handle_user_input() {
@@ -120,9 +137,10 @@ int main(void) {
 
   int game = 1;
   while (game) {
-    GameInfo_t game_info = updateCurrentState();
-    print_field(game_info);
-    if (game_info.pause) print_pause();
+    GameInfo_t gameinfo = updateCurrentState();
+    print_field(gameinfo);
+    print_next(gameinfo);
+    if (gameinfo.pause) print_pause();
     refresh();
     usleep(10000);  // 1/100 sec
     game = handle_user_input();
