@@ -33,11 +33,14 @@ static gamestate_t launchfig(game_t *game) {
 }
 
 static gamestate_t shiftfig(game_t *game) {
+  static int scoring[] = {0, 100, 300, 700, 1500};
+
   gamestate_t retstate = StateRun;
   if (!field_shiftfig(&game->field)) {
     field_commitfig(&game->field);
     field_removefig(&game->field);
-    field_droplines(&game->field);
+    int linesdropped = field_droplines(&game->field);
+    game->info.score += scoring[linesdropped];
     retstate = StateLaunchFig;
   }
   return retstate;
