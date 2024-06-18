@@ -34,7 +34,7 @@ static void init_curses() {
   init_color(13, 0, 502, 0);       // BLUE for S
   init_color(14, 502, 0, 502);     // PURPLE for Z
 
-  init_color(15, 500, 500, 500);     // GRAY
+  init_color(15, 500, 500, 500);  // GRAY
 
   for (int i = 0; i < 7; i++) {
     init_pair(i + 1, COLOR_BLACK, i + 8);

@@ -4,8 +4,8 @@
 #include <sys/time.h>
 
 #include "brick_game/tetris/field.h"
-#include "brick_game/tetris/tetris.h"
 #include "brick_game/tetris/figset.h"
+#include "brick_game/tetris/tetris.h"
 
 typedef enum {
   StateRun,
