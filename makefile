@@ -18,6 +18,7 @@ BACK_OBJ:=$(patsubst src/%.c, $(OBJ_DIR)/%.o, $(BACK_SRC))
 FRONT_OBJ:=$(patsubst src/%.c, $(OBJ_DIR)/%.o, $(FRONT_SRC))
 TEST_OBJ:=$(patsubst src/%.c, $(OBJ_DIR)/%.o, $(TEST_SRC))
 
+BACK_LIB:=$(BUILD_DIR)/tetris_backend.a
 TARGET:=$(BUILD_DIR)/tetris
 
 all: install
@@ -38,12 +39,15 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) -I $(INC) $< -o $@
 
-$(TARGET): $(BACK_OBJ) $(FRONT_OBJ)
+$(BACK_LIB): $(BACK_OBJ)
+	ar rcs $@ $^
+
+$(TARGET): $(FRONT_OBJ) $(BACK_LIB)
 	$(CC) $(LDFLAGS) $^ -lncurses -o $@
 
 test: $(BUILD_DIR)/test
 
-$(BUILD_DIR)/test: $(BACK_OBJ) $(TEST_OBJ)
+$(BUILD_DIR)/test: $(TEST_OBJ) $(BACK_LIB)
 	$(CC) $(LDFLAGS) $^ -lcheck -o $@
 
 GCOV_DIR:=$(BUILD_DIR)/gcov
