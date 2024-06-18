@@ -15,6 +15,13 @@ typedef gamestate_t (*transition_fn)(game_t *);
 static bool _checkconstraints(int row, int col, int width, int height) {
   return row >= 0 && row < width && col >= 0 && col < height;
 }
+
+static gamestate_t _prevstate(gamestate_t *gs) {
+  static gamestate_t prev;
+  if (gs) prev = *gs;
+  return prev;
+}
+
 static bool _shiftfig(game_t *game) {
   static int scoring[] = {0, 100, 300, 700, 1500};
 
@@ -79,13 +86,14 @@ static gamestate_t rotatefig(game_t *game) {
 
 static gamestate_t setpause(game_t *game) {
   game->info.pause = 1;
+  _prevstate(&game->state);
   return StatePause;
 }
 
 static gamestate_t resetpause(game_t *game) {
   game->info.pause = 0;
   gettimeofday(&game->nexttm, NULL);
-  return StateRun;
+  return _prevstate(NULL);
 }
 
 static gamestate_t initgame(game_t *game) {
@@ -172,7 +180,7 @@ void committransition(game_t *game, gameact_t act) {
        movefigdown, tick, fillinfofield, mapfallingfigure},
       {restartgame, resetpause, endgame, pass, pass, pass, pass, pass, pass,
        fillinfofield, mapfallingfigure},
-      {launchfig, launchfig, launchfig, launchfig, launchfig, launchfig,
+      {launchfig, setpause, launchfig, launchfig, launchfig, launchfig,
        launchfig, launchfig, launchfig, fillinfofield, launchfig},
       {pass, pass, pass, pass, pass, pass, pass, pass, pass, fillinfofield,
        pass},
