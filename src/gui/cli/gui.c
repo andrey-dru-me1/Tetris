@@ -7,9 +7,12 @@
 #define WIDTH 10
 #define HEIGHT 20
 
+#define COLOR_GRAY 15
+
 #define SET_SPACE bkgdset(COLOR_PAIR(8))
 #define SET_BORDER bkgdset(COLOR_PAIR(9))
 #define HIGHLIGHT_TEXT bkgdset(COLOR_PAIR(10))
+#define SET_DESCRIPTION bkgdset(COLOR_PAIR(11))
 #define RESET_COLOR bkgdset(COLOR_PAIR(0))
 
 static void init_curses() {
@@ -31,13 +34,16 @@ static void init_curses() {
   init_color(13, 0, 502, 0);       // BLUE for S
   init_color(14, 502, 0, 502);     // PURPLE for Z
 
+  init_color(15, 500, 500, 500);     // GRAY
+
   for (int i = 0; i < 7; i++) {
     init_pair(i + 1, COLOR_BLACK, i + 8);
   }
 
-  init_pair(8, COLOR_YELLOW, COLOR_BLACK);
-  init_pair(9, COLOR_WHITE, COLOR_GREEN);
-  init_pair(10, COLOR_BLACK, COLOR_WHITE);
+  init_pair(8, COLOR_YELLOW, COLOR_BLACK);  // Position of a figure to fall
+  init_pair(9, COLOR_WHITE, COLOR_GREEN);   // Border
+  init_pair(10, COLOR_BLACK, COLOR_WHITE);  // Pause
+  init_pair(11, COLOR_GRAY, COLOR_BLACK);   // Description
 }
 
 static void print_border() {
@@ -108,34 +114,42 @@ static void print_next(GameInfo_t gameinfo) {
 
 static void print_score(GameInfo_t gameinfo) {
   move(7, WIDTH * 2 + 3);
-  addstr("Score:");
+  addstr("Score");
   move(8, WIDTH * 2 + 3);
+  SET_SPACE;
   printw("%10d", gameinfo.score);
+  RESET_COLOR;
 }
 
 static void print_level(GameInfo_t gameinfo) {
   move(9, WIDTH * 2 + 3);
-  addstr("Level:");
+  addstr("Level");
   move(10, WIDTH * 2 + 3);
+  SET_SPACE;
   printw("%10d", gameinfo.score / 600);
+  RESET_COLOR;
 }
 
 static void print_high_score(GameInfo_t gameinfo) {
   move(11, WIDTH * 2 + 3);
-  addstr("High score:");
+  addstr("High score");
   move(12, WIDTH * 2 + 3);
+  SET_SPACE;
   printw("%10d", gameinfo.high_score);
+  RESET_COLOR;
 }
 
 static void print_description() {
-  mvaddstr(13, WIDTH * 2 + 3, "'q'    Term");
-  mvaddstr(14, WIDTH * 2 + 3, "'w'      Up");
-  mvaddstr(15, WIDTH * 2 + 3, "'a'    Left");
-  mvaddstr(16, WIDTH * 2 + 3, "'s'    Down");
-  mvaddstr(17, WIDTH * 2 + 3, "'d'   Right");
-  mvaddstr(18, WIDTH * 2 + 3, "' '  Action");
-  mvaddstr(19, WIDTH * 2 + 3, "'e'   Pause");
-  mvaddstr(20, WIDTH * 2 + 3, "'r'   Start");
+  SET_DESCRIPTION;
+  mvaddstr(13, WIDTH * 2 + 3, "'q'   Term");
+  mvaddstr(14, WIDTH * 2 + 3, "'w'     Up");
+  mvaddstr(15, WIDTH * 2 + 3, "'a'   Left");
+  mvaddstr(16, WIDTH * 2 + 3, "'s'   Down");
+  mvaddstr(17, WIDTH * 2 + 3, "'d'  Right");
+  mvaddstr(18, WIDTH * 2 + 3, "' ' Action");
+  mvaddstr(19, WIDTH * 2 + 3, "'e'  Pause");
+  mvaddstr(20, WIDTH * 2 + 3, "'r'  Start");
+  RESET_COLOR;
 }
 
 static int handle_user_input() {
