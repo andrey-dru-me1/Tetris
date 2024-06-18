@@ -12,8 +12,6 @@
 
 typedef gamestate_t (*transition_fn)(game_t *);
 
-static void _droplines(game_t *game) { field_droplines(&game->field); }
-
 static bool _checkconstraints(int row, int col, int width, int height) {
   return row >= 0 && row < width && col >= 0 && col < height;
 }
