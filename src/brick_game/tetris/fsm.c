@@ -176,8 +176,8 @@ static gamestate_t mapfallingfigure(game_t *game) {
 
 void committransition(game_t *game, gameact_t act) {
   static transition_fn transitions[7][11] = {
-      {restartgame, setpause, endgame, moveleft, moveright, rotatefig, shiftfig,
-       movefigdown, tick, fillinfofield, mapfallingfigure},
+      {restartgame, setpause, endgame, moveleft, moveright, movefigdown,
+       shiftfig, rotatefig, tick, fillinfofield, mapfallingfigure},
       {restartgame, resetpause, endgame, pass, pass, pass, pass, pass, pass,
        fillinfofield, mapfallingfigure},
       {launchfig, setpause, launchfig, endgame, launchfig, launchfig, launchfig,

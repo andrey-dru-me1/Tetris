@@ -142,11 +142,11 @@ static void print_high_score(GameInfo_t gameinfo) {
 static void print_description() {
   SET_DESCRIPTION;
   mvaddstr(13, WIDTH * 2 + 3, "'q'   Term");
-  mvaddstr(14, WIDTH * 2 + 3, "'w'     Up");
+  mvaddstr(14, WIDTH * 2 + 3, "'w' Action");
   mvaddstr(15, WIDTH * 2 + 3, "'a'   Left");
   mvaddstr(16, WIDTH * 2 + 3, "'s'   Down");
   mvaddstr(17, WIDTH * 2 + 3, "'d'  Right");
-  mvaddstr(18, WIDTH * 2 + 3, "' ' Action");
+  mvaddstr(18, WIDTH * 2 + 3, "' '     Up");
   mvaddstr(19, WIDTH * 2 + 3, "'e'  Pause");
   mvaddstr(20, WIDTH * 2 + 3, "'r'  Start");
   RESET_COLOR;
@@ -172,10 +172,10 @@ static int handle_user_input() {
         userInput(Down, false);
         break;
       case 'w':
-        userInput(Up, false);
+        userInput(Action, false);
         break;
       case ' ':
-        userInput(Action, false);
+        userInput(Up, false);
         break;
       case 'e':
         userInput(Pause, false);
