@@ -1,5 +1,6 @@
 #include "brick_game/tetris/game.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -19,6 +20,13 @@ void game_init(game_t *game) {
   game->info.score = 0;
   game->info.speed = 0;
 
+  FILE *hscorefile = fopen("high_score.txt", "r");
+  if (hscorefile) {
+    fscanf(hscorefile, "%d", &game->info.high_score);
+    fclose(hscorefile);
+  } else
+    game->info.high_score = 0;
+
   figset_init(&game->figset);
   blockmatrix_create(&game->field.bm, HEIGHT, WIDTH);
   srand(time(NULL));
@@ -28,6 +36,13 @@ void game_init(game_t *game) {
 }
 
 void game_delete(game_t *game) {
+  FILE *file;
+  if (game->info.score > game->info.high_score &&
+      (file = fopen("high_score.txt", "w"))) {
+    fprintf(file, "%d", game->info.score);
+    fclose(file);
+  }
+
   free(*game->info.field);
   free(game->info.field);
   game->info.field = NULL;

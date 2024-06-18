@@ -120,15 +120,22 @@ static void print_level(GameInfo_t gameinfo) {
   printw("%10d", gameinfo.score / 600);
 }
 
+static void print_high_score(GameInfo_t gameinfo) {
+  move(11, WIDTH * 2 + 3);
+  addstr("High score:");
+  move(12, WIDTH * 2 + 3);
+  printw("%10d", gameinfo.high_score);
+}
+
 static void print_description() {
-  mvaddstr(12, WIDTH * 2 + 2, "'q' Term");
-  mvaddstr(13, WIDTH * 2 + 2, "'w' Up");
-  mvaddstr(14, WIDTH * 2 + 2, "'a' Left");
-  mvaddstr(15, WIDTH * 2 + 2, "'s' Down");
-  mvaddstr(16, WIDTH * 2 + 2, "'d' Right");
-  mvaddstr(17, WIDTH * 2 + 2, "' ' Action");
-  mvaddstr(18, WIDTH * 2 + 2, "'e' Pause");
-  mvaddstr(19, WIDTH * 2 + 2, "'r' Start");
+  mvaddstr(13, WIDTH * 2 + 3, "'q'    Term");
+  mvaddstr(14, WIDTH * 2 + 3, "'w'      Up");
+  mvaddstr(15, WIDTH * 2 + 3, "'a'    Left");
+  mvaddstr(16, WIDTH * 2 + 3, "'s'    Down");
+  mvaddstr(17, WIDTH * 2 + 3, "'d'   Right");
+  mvaddstr(18, WIDTH * 2 + 3, "' '  Action");
+  mvaddstr(19, WIDTH * 2 + 3, "'e'   Pause");
+  mvaddstr(20, WIDTH * 2 + 3, "'r'   Start");
 }
 
 static int handle_user_input() {
@@ -179,6 +186,7 @@ int main(void) {
     print_next(gameinfo);
     print_score(gameinfo);
     print_level(gameinfo);
+    print_high_score(gameinfo);
     if (gameinfo.pause) print_pause();
     refresh();
     usleep(10000);  // 1/100 sec
