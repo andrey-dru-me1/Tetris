@@ -20,7 +20,14 @@ TEST_OBJ:=$(patsubst src/%.c, $(OBJ_DIR)/%.o, $(TEST_SRC))
 
 TARGET:=$(BUILD_DIR)/tetris
 
-all: $(TARGET)
+all: install
+
+install: $(TARGET)
+	mkdir -p bin
+	cp $(TARGET) bin/tetris
+
+uninstall:
+	rm bin/tetris
 
 clean:
 	rm -rf $(BUILD_DIR) *.out
