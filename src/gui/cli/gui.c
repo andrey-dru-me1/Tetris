@@ -23,13 +23,18 @@ static void init_curses() {
   keypad(stdscr, TRUE);
   start_color();
 
-  init_pair(1, COLOR_WHITE, COLOR_WHITE);
-  init_pair(2, COLOR_WHITE, COLOR_RED);
-  init_pair(3, COLOR_WHITE, COLOR_GREEN);
-  init_pair(4, COLOR_WHITE, COLOR_YELLOW);
-  init_pair(5, COLOR_WHITE, COLOR_BLUE);
-  init_pair(6, COLOR_WHITE, COLOR_MAGENTA);
-  init_pair(7, COLOR_WHITE, COLOR_CYAN);
+  init_color(8, 1000, 0, 0);       // RED for I
+  init_color(9, 1000, 1000, 0);    // YELLOW for L
+  init_color(10, 1000, 396, 8);    // ORANGE for J
+  init_color(11, 1000, 600, 796);  // PINK for O
+  init_color(12, 0, 0, 1000);      // BLUE for T
+  init_color(13, 0, 502, 0);       // BLUE for S
+  init_color(14, 502, 0, 502);     // PURPLE for Z
+
+  for (int i = 0; i < 7; i++) {
+    init_pair(i + 1, COLOR_BLACK, i + 8);
+  }
+
   init_pair(8, COLOR_YELLOW, COLOR_BLACK);
   init_pair(9, COLOR_WHITE, COLOR_GREEN);
   init_pair(10, COLOR_BLACK, COLOR_WHITE);
