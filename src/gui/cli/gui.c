@@ -120,6 +120,17 @@ static void print_level(GameInfo_t gameinfo) {
   printw("%10d", gameinfo.score / 600);
 }
 
+static void print_description() {
+  mvaddstr(12, WIDTH * 2 + 2, "'q' Term");
+  mvaddstr(13, WIDTH * 2 + 2, "'w' Up");
+  mvaddstr(14, WIDTH * 2 + 2, "'a' Left");
+  mvaddstr(15, WIDTH * 2 + 2, "'s' Down");
+  mvaddstr(16, WIDTH * 2 + 2, "'d' Right");
+  mvaddstr(17, WIDTH * 2 + 2, "' ' Action");
+  mvaddstr(18, WIDTH * 2 + 2, "'e' Pause");
+  mvaddstr(19, WIDTH * 2 + 2, "'r' Start");
+}
+
 static int handle_user_input() {
   int game = 1;
 
@@ -159,6 +170,7 @@ static int handle_user_input() {
 int main(void) {
   init_curses();
   print_border();
+  print_description();
 
   int game = 1;
   while (game) {
