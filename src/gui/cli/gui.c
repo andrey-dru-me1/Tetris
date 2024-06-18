@@ -85,7 +85,7 @@ static void print_field(GameInfo_t gameinfo) {
 
 static void print_pause() {
   HIGHLIGHT_TEXT;
-  mvaddstr(HEIGHT / 2, WIDTH - 3, "Paused");
+  mvaddstr(HEIGHT / 2, WIDTH - 2, "Paused");
   RESET_COLOR;
 }
 
