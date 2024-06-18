@@ -74,3 +74,8 @@ $(GCOV_OBJ_DIR)/test/%.o: $(SRC_DIR)/test/%.c
 $(GCOV_OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(@D)
 	$(CC) -c -O0 --coverage -I $(INC) $< -o $@
+
+dist:
+	tar -cvf tetris.tar .
+
+dvi:
