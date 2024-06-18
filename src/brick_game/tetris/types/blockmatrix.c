@@ -34,18 +34,6 @@ void blockmatrix_rotate(blockmatrix_t *src, blockmatrix_t *dst) {
   blockmatrix_remove(&new);
 }
 
-void blockmatrix_flip_vertically(blockmatrix_t *src, blockmatrix_t *dst) {
-  blockmatrix_t new;
-  blockmatrix_create(&new, src->rows, src->cols);
-  for (int i = 0; i < src->rows; i++) {
-    for (int j = 0; j < src->cols; j++) {
-      blockmatrix_set(&new, i, src->cols - 1 - j, blockmatrix_get(src, i, j));
-    }
-  }
-  blockmatrix_copy(&new, dst);
-  blockmatrix_remove(&new);
-}
-
 void blockmatrix_copy(blockmatrix_t *src, blockmatrix_t *dst) {
   dst->rows = src->rows;
   dst->cols = src->cols;
