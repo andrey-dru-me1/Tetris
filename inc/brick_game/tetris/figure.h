@@ -13,11 +13,12 @@ typedef enum { I = 1, L, J, O, T, S, Z } figtype_t;
 typedef struct {
   blockmatrix_t *rots;
   size_t rotcnt;
+  int rowsempty;
   figtype_t figtype;
 } figure_t;
 
 void figure_create(figure_t *figure, size_t rows, size_t cols, size_t rotcnt,
-                   figtype_t figtype);
+                   int rowsempty, figtype_t figtype);
 void figure_createfromarray(figure_t *figure, size_t rows, size_t cols,
                             size_t rotcnt, figtype_t figtype, block_t arr[]);
 blockmatrix_t figure_get(figure_t *figure, size_t i);

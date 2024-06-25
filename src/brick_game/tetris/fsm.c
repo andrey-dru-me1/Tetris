@@ -35,6 +35,11 @@ static bool _shiftfig(game_t *game) {
   return validshift;
 }
 
+static void _addtimeinterval(struct timeval *t, long usec) {
+  *t = (struct timeval){.tv_sec = t->tv_sec + ((t->tv_usec + usec) / (long)1e6),
+                        .tv_usec = (t->tv_usec + usec) % (long)1e6};
+}
+
 static gamestate_t pass(game_t *game) { return game->state; }
 
 static gamestate_t restartgame(game_t *game) {
@@ -48,11 +53,13 @@ static gamestate_t launchfig(game_t *game) {
                                  5e5, 4e5, 3e5, 2e5, 1e5};
 
   gamestate_t retstate = StateRun;
-  if (!field_spawnfig(&game->field, game->nextfig, 0, 3, 0)) {
+  if (!field_spawnfig(&game->field, game->nextfig, -game->nextfig->rowsempty, 3,
+                      0)) {
     retstate = StateFailure;
   }
   game->nextfig = game->figset.figs + (rand() % 7);
   game->usectickinterval = tickintervals[MIN(9, game->info.score / 600)];
+  _addtimeinterval(&game->nexttm, game->usectickinterval);
   return retstate;
 }
 
@@ -119,10 +126,7 @@ static gamestate_t tick(game_t *game) {
   if (now.tv_sec >= game->nexttm.tv_sec &&
       now.tv_usec >= game->nexttm.tv_usec && game->state == StateRun) {
     retstate = shiftfig(game);
-    game->nexttm = (struct timeval){
-        .tv_sec = game->nexttm.tv_sec +
-                  ((game->nexttm.tv_usec + game->usectickinterval) / (long)1e6),
-        .tv_usec = (game->nexttm.tv_usec + game->usectickinterval) % (long)1e6};
+    _addtimeinterval(&game->nexttm, game->usectickinterval);
   }
   return retstate;
 }
