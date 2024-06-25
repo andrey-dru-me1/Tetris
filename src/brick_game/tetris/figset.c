@@ -70,7 +70,7 @@ static figure_t figgen_generate_S_figure() {
 
 static figure_t figgen_generate_Z_figure() {
   figure_t fig;
-  figure_createfromarray(&fig, 3, 3, 4, Z,
+  figure_createfromarray(&fig, 3, 3, 2, Z,
                          (block_t[]){
                              0, 0, 0,  // 0
                              1, 1, 0,  // 1
