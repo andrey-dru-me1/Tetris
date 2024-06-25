@@ -16,6 +16,7 @@ void game_init(game_t *game) {
   int *next = calloc(4 * 4, sizeof(*next));
   for (size_t i = 0; i < 4; i++) game->info.next[i] = next + i * 4;
   game->info.high_score = 0;
+  game->info.pause = 0;
   game->info.level = 0;
   game->info.score = 0;
   game->info.speed = 0;
