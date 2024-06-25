@@ -1,38 +1,50 @@
 #include "brick_game/tetris/field.h"
 
-static bool _field_validatefig(field_t *f) {
-  bool does_overlap = false;
+enum overlap_e { Ok, Fig, Border };
+
+static enum overlap_e _field_validatefig(field_t *f) {
+  enum overlap_e overlap = Ok;
 
   blockmatrix_t bm = figure_get(f->ff.fig, f->ff.rotidx);
-  for (int i = 0; !does_overlap && i < bm.rows; i++) {
-    for (int j = 0; !does_overlap && j < bm.cols; j++) {
+  for (int i = 0; overlap == Ok && i < bm.rows; i++) {
+    for (int j = 0; overlap == Ok && j < bm.cols; j++) {
       block_t figblock = blockmatrix_get(&bm, i, j);
-      if (figblock != 0 &&
-          (f->ff.row + i >= (int)f->bm.rows || f->ff.col + j < 0 ||
-           f->ff.col + j >= f->bm.cols ||
-           (f->ff.row + i >= 0 &&
-            blockmatrix_get(&f->bm, f->ff.row + i, f->ff.col + j) != 0)))
-        does_overlap = true;
+      if (figblock != 0 && (f->ff.col + j < 0 || f->ff.col + j >= f->bm.cols)) {
+        overlap = Border;
+      } else if (figblock != 0 && (f->ff.row + i >= (int)f->bm.rows ||
+                                   (f->ff.row + i >= 0 &&
+                                    blockmatrix_get(&f->bm, f->ff.row + i,
+                                                    f->ff.col + j) != 0))) {
+        overlap = Fig;
+      }
     }
   }
 
-  return !does_overlap;
+  return overlap;
 }
 
 bool field_spawnfig(field_t *f, figure_t *fig, int row, int col, int rotidx) {
   f->ff =
       (falling_figure_t){.fig = fig, .row = row, .col = col, .rotidx = rotidx};
-  return _field_validatefig(f);
+  return _field_validatefig(f) == Ok;
 }
 
 bool field_rotatefig(field_t *f) {
   int prev_rotidx = f->ff.rotidx;
 
-  bool validfig;
+  enum overlap_e validfig;
   do {
     f->ff.rotidx = (f->ff.rotidx + 1) % f->ff.fig->rotcnt;
     validfig = _field_validatefig(f);
-  } while (!validfig);
+    if (validfig == Border) {
+      int figsiz = f->ff.fig->rots[0].cols;
+      bool isvalid = false;
+      for (int i = 1; !isvalid && i < figsiz; i = i > 0 ? -i : -i + 1) {
+        isvalid = field_movefig(f, f->ff.row, f->ff.col + i);
+      }
+      if (isvalid) validfig = Ok;
+    }
+  } while (validfig != Ok);
 
   return f->ff.rotidx != prev_rotidx;
 }
@@ -42,7 +54,7 @@ bool field_movefig(field_t *f, int row, int col) {
   f->ff.row = row;
   f->ff.col = col;
 
-  bool validfig = _field_validatefig(f);
+  bool validfig = (_field_validatefig(f) == Ok);
   if (!validfig) {
     f->ff.row = prev_row;
     f->ff.col = prev_col;
